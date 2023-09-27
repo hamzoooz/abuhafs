@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title> {% block title %} إضافة كتاب  {% endblock title %} </title>
+{% block content %}
+<div class=" container  trending bg-gradient py-2 " style="--bs-bg-opacity: .6;">
+    <div class="row py-5">
+    <h2 class="text-white text-lead bg-success bg-gradient1 p-3 "> {{ title }}  </h2>
+        <div class="card  h-100 shadow  ">
+            <form action="{% url 'add_book' %}"method="POST" enctype="multipart/form-data" class="p-4">
+                {% csrf_token %}
+
+                
+                {{ form.as_p }}
+
+                {% comment %} <label for="book-name"> title  </label>
+                <input type="text" name="name"  id="book-name"   placeholder="write name ... " class="form-control pt-2 mb-3  book-name" />
+
+                <label for="book-file">file</label>
+                <input type="file" name="file"  id="book-file"   placeholder="write file ... " class="form-control pt-2 mb-3  book-file" />
+
+                <label for="book-sample">sample</label>
+                <input type="file" name="sample"  id="book-sample"   placeholder="write sample ... " class="form-control pt-2 mb-3  book-sample" />
+                
+                <label for="book-category">category</label>
+                <input type="selec" name="category"  id="book-category"   placeholder="write category ... " class="form-control pt-2 mb-3  book-category" />
+                
+                <label for="book-book_image">book_image</label>
+                <input type="file" name="book_image"  id="book-book_image"   placeholder="write book_image ... " class="form-control pt-2 mb-3  book-book_image" />
+                
+                <label for="book-number_pages">number_pages</label>
+                <input type="number" name="number_pages"  id="book-number_pages"   placeholder="write number_pages ... " class="form-control pt-2 mb-3  book-number_pages" />
+                
+                <label for="book-language">language</label>
+                <input type="text" name="language"  id="book-language"   placeholder="write language ..." class="form-control pt-2 mb-3  book-language" />
+                
+                <label for="book-short_link">short_link</label>
+                <input type="text" name="short_link"  id="book-short_link"   placeholder="write short_link ... " class="form-control pt-2 mb-3  book-short_link" />
+                
+                <label for="book-isnn">isnn</label>
+                <input type="text" name="isnn"  id="book-isnn"   placeholder="write isnn ... " class="form-control pt-2 mb-3  book-isnn" />
+                
+                <label for="book-edition">edition</label>
+                <input type="number" name="edition"  id="book-edition"   placeholder="write edition ... " class="form-control pt-2 mb-3  book-edition" />
+                
+                <label for="book-published_house">published_house</label>
+                <input type="text" name="published_house"  id="book-published_house"   placeholder="write published_house ... " class="form-control pt-2 mb-3  book-published_house" />
+                
+                <textarea name="small_descrption" id="book-small_descrption" class="form-control book-small_descrption py-3 mb-3 " cols="30" rows="4"></textarea>
+                
+                <textarea name="descrption" id="book-descrption" class="form-control book-descrption py-3 mb-3 " cols="30" rows="10"></textarea>
+                
+                <input type="number" name="original_price" id="book-original_price"  placeholder="write original_price ... "  class="form-control pt-2 mb-3  book-original_price" />
+                <input type="number" name="selling_price" id="book-selling_price"  placeholder="write selling_price ... "  class="form-control pt-2 mb-3  book-selling_price" />
+                <input type="number" name="size" id="book-size"  placeholder="write size ... "  class="form-control pt-2 mb-3  book-size" />
+                <input type="text" name="tags" id="book-tags"  placeholder="write tags ... "  class="form-control pt-2 mb-3  book-tags" />
+                <input type="text" name="meta_tilte" id="book-meta_tilte"  placeholder="write meta_tilte ... "  class="form-control pt-2 mb-3  book-meta_tilte" />
+                <input type="text" name="meta_keyword" id="book-meta_keyword"  placeholder="write meta_keyword ... "  class="form-control pt-2 mb-3  book-meta_keyword" />
+                <input type="text" name="meta_description" id="book-meta_description"  placeholder="write meta_description ... "  class="form-control pt-2 mb-3  book-meta_description" />  {% endcomment %}
+
+                <button type="submit" class="btn btn-success" > <i class="fa fa-plus"></i>  إضافة كتاب </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+name
+file
+sample
+category
+book_image
+number_pages
+language
+short_link
+isnn
+edition
+published_house
+small_descrption
+descrption
+original_price
+selling_price
+type_of_book
+size
+tags
+meta_tilte
+meta_keyword
+meta_description
+
+
+
+file = request.POST.get['file']
+sample = request.POST.get['sample']
+category = request.POST.get['category']
+book_image = request.POST.get['book_image']
+number_pages = request.POST.get['number_pages']
+language = request.POST.get['language']
+short_link = request.POST.get['short_link']
+isnn = request.POST.get['isnn']
+edition = request.POST.get['edition']
+published_house = request.POST.get['published_house']
+small_descrption = request.POST.get['small_descrption']
+descrption = request.POST.get['descrption']
+original_price = request.POST.get['original_price']
+selling_price = request.POST.get['selling_price']
+type_of_book = request.POST.get['type_of_book']
+size = request.POST.get['size']
+tags = request.POST.get['tags']
+meta_tilte = request.POST.get['meta_tilte']
+meta_keyword = request.POST.get['meta_keyword']
+meta_description = request.POST.get['meta_description']
+title = request.POST.get['name']
+title = request.POST.get['name']
+title = request.POST.get['name']
+title = request.POST.get['name']
+
+
+
+
+-->

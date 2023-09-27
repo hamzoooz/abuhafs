@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+<title> {% block title %} My Order {% endblock title %} </title>
+
+{% block content %}
+
+
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2 "> My Order </span>
+    </div>
+</div>
+
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body shadow p-3">
+                <h3 class="">My Order 
+                    <a href="{% url 'frontpage' %} " class="btn btn-warning float-end" > <i class="fa fa-reply"></i> Back </a>
+                </h3>
+                <table class="table table-striped m-2">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Order Data </th>
+                            <th>Tracking .No </th>
+                            <th>Total Price </th>
+                            <th>Status </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order %}
+                        <tr>
+                            <td> {{ item.create_at }} </td>
+                            <td> {{ item.tracking_no }} </td>
+                            <td> {{ item.total_price }} </td>
+                            <td> {{ item.satuts }} </td>
+                            <td> 
+                                <a href="{% url 'orderview'  item.tracking_no  %}" class="btn btn-info"> <i class="fa fa-eye"></i> View</a>    
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% comment %} conutry, pincode, total_price, payment_mode, payment_id, satuts, message, tracking_no) {% endcomment %}
+{% comment %} Order(*, create_at, update_at, user, fname, lname, email, phone, address, city, stats, {% endcomment %}
+{% endblock content %}

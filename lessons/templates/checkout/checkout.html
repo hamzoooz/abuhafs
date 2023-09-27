@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title> {% block title %} Checkout   {% endblock title %} </title>
+    
+{% block content %}
+
+<div class="container">
+    <div class="py-1 bg-secondary1 text-secondary ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary "></i>
+        <span class="text-secondary p-2 ">   checkout </span>
+    </div>
+</div>
+
+
+<div class="container mt-3 " >      
+    <form action="{% url 'placeorder' %}" method="POST">
+        {% csrf_token %}
+        
+        <div class="row" >      
+            <div class="col-md-7 mb-3" > 
+                <div class="card shadow" >      
+                    <div class="card-body" >      
+                        <h6> Basic Details </h6>
+                        <hr>
+                        <div class="row" >
+                            {% comment %} Fiest NAme  {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> First Name </label>
+                                <input type="text" value="{{ request.user.first_name }}" required="required" class="form-control"  name="fname" placeholder="Enter Your First Name" />
+                            </div>  
+                            {% comment %} last name  {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Last  Name </label>
+                                <input type="text"  value="{{ request.user.last_name }}" required="required" class="form-control"  name="lname" placeholder="Enter Your Last Name" />
+                            </div>  
+                            {% comment %} Email {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Email </label>
+                                <input type="email"  value="{{ request.user.email }}" required="required" class="form-control" name="email"  placeholder="Enter Your Email" />
+                            </div>  
+
+                            {% comment %} phone  {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Phone </label>
+                                <input type="number"  value="{{ user_profile.phone }}" required="required" class="form-control" name="phone"  placeholder="Enter Your Phone Number " />
+                            </div>  
+
+                            {% comment %} Address {% endcomment %}
+                            <div class="col-md-12" >      
+                                <label> Address </label>
+                                <textarea type="t"  required="required" class="form-control" name="address"  placeholder="Enter Your Address " >{{ user_profile.address }}  </textarea>
+                            </div>  
+
+                            {% comment %} City {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> City </label>
+                                <input type="text"  value="{{ user_profile.city }}"  required="required" class="form-control"  name="city" placeholder="Enter Your City" />
+                            </div>  
+                            {% comment %} Status {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Stats </label>
+                                <input type="text"  value="{{ user_profile.stats }}"  required="required" class="form-control" name="stats"  placeholder="Enter Your Status " />
+                            </div>  
+
+                            {% comment %} Country {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Country </label>
+                                <input type="text"  value="{{ user_profile.conutry }}"  required="required" class="form-control"  name="conutry" placeholder="Enter Your Country" />
+                            </div>  
+
+                            {% comment %} Pine Code  {% endcomment %}
+                            <div class="col-md-6 mt-2" >      
+                                <label> Pin Code </label>
+                                <input type="text"  value="{{ user_profile.pincode }}"  required="required" class="form-control" name="pincode"  placeholder="Enter Your Pin Code  " />
+                            </div> 
+                        </div> <!--  ./row-->
+                    </div>  <!--  ./Cart-body -->
+                </div>  <!--  ./cart-->
+            </div><!--  ./col-md-7 -->
+
+            <div class="col-md-5" >      
+                <div class="card shadow" >      
+                    <div class="card-body" >      
+                        <h4> Order Summary </h4>
+                        {% if carditem %}
+                        <table class="table table-striptags table-bordereds" > 
+                            <thead> 
+                                <tr>
+                                    <th> Cover </th>
+                                    <th> Name  </th>
+                                    {% comment %} <th> Qty </th> {% endcomment %}
+                                    <th> Price </th>
+                                </tr>
+                            </thead> 
+                            
+                            <tbody> 
+                                {% for item in carditem %}
+                                    <tr>
+                                        <th> <a href="{% url 'book_detail' item.book.slug %}"> <img src="{{ item.book.book_image.url }}" calss="me-4  thumbnail  " width="50px" height="50px" />  </a> </th>
+                                        <th> <a href="{% url 'book_detail' item.book.slug %}"> {{item.book.name}}  </a> </th>
+                                        <th> {{item.book.selling_price | stringformat:'d' }} </th>
+                                    </tr>
+                                {% endfor %}
+                            </tbody> 
+                        </table>
+                        <h6 class="fw-bold"> Grand Total 
+                            <span  class="float-end fw-bold mr-4">  US {{ total_price | stringformat:'d' }} </span>
+                        </h6>
+
+                        <input type="hidden" name="payment_mode" value="COD" class="payment-mode">
+                        <div class="mt-3 ">
+                            <button type="submit" class="btn btn-success w-100">COD | Place Order </button>
+                            <button type="button" class="btn btn-primary paywithrozpay mt-2 w-100">Pay With Razorpay </button>
+                        </div>
+                        {% else %}
+                        <h4> Your Card Is Empty ! </h4>
+                        {% endif %}
+                        {% comment %} <hr> {% endcomment %}
+                    </div> {% comment %} .card-body {% endcomment %}
+                </div>{% comment %} .card {% endcomment %}
+            </div>{% comment %} .col-md-5 {% endcomment %}
+        </div>{% comment %} .row {% endcomment %}
+    </form>
+</div>{% comment %} .container {% endcomment %}
+
+
+
+
+{% endblock content %}

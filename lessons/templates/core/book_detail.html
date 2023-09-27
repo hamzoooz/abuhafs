@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+    <title> {% block title %} {{books.name}} {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-left text-secondary  "></i>
+        <a href="{% url 'categories'  %}" class="text-secondary  p-2">الأفسام   </a> <i class="fa fa-caret-left text-secondary  "></i>
+        <a href="{% url 'category_detail'  books.category.slug %}" class="text-secondary  p-2 "> {{books.category.name}}  </a> <i class="fa fa-caret-left text-secondary  "></i>
+        <span class="text-secondary  p-2 "> {{books.name}}  </span>
+    </div>
+</div>
+
+<div class="py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div class="row book_data">
+                            <div class="col-4  col-md-3 text-center ">
+                                <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid " style="background-image: url('{{books.book_image.url}}');background-size: contain; height: 250px; background-repeat: no-repeat; background-position: center;  " ></div>
+                                <input type="hidden"  value="{{ books.slug }}" class="book_slug" >
+                                    {% if books.selling_price > 0 %}
+                                        <input type="hidden"  value="{{ books.id }}" class="book_id" >
+                                        {% csrf_token %}
+                                        <div  class="btn btn-warning  w-100 mt-2 addToCartBtn "> <i class="fa fa-shopping-cart"></i> Add to Card </div>
+                                        <a href="#" class="btn btn-success w-100 mt-2 "> <i class="fa fa-eye"></i> نسحة  </a>
+                                    {% else %}
+                                        <a download href="{{ books.file.url }}"><button class="btn btn-primary w-100 mt-2 "> <i class="fa fa-download"></i> تحميل</button></a>
+                                        <a href="{{ books.file.url }}"><button class="btn btn-success mt-3 w-100 mt-2 "> <i class="fa fa-eye"></i> فراء</button></a>
+                                    {% endif %}
+
+                                <!-- sharing and reporting and edite -->
+                                <div class="sharing-in-single pt-4 text-center ">
+                                    {% if books.user.user == request.user or request.user.is_staff %}
+                                    
+                                        <a href="{% url 'edit_book' books.id  %}"> <span class="p-1 icon-in-share" ><i class="fa fa-edit"></i></span> </a>
+                                    {% else %}
+
+                                    <span class="p-1 icon-in-share" ><i class="fa fa-edit"></i></span>
+
+                                    {% endif %}
+                                    <span class="p-1 icon-in-share" ><i class="fa fa-share-square"></i></span>
+                                    <span class="p-1 icon-in-share" ><i class="fa fa-share-alt"></i></span>
+                                    <!-- <span class="p-1 icon-in-share" ><i class="fa fa-circle-exclamation"></i></span> -->
+                                    <span class="p-1 icon-in-share" ><i class="fa fa-triangle-exclamation"></i></span>
+                                </div><!-- sharing-in-single -->
+
+                                <form action="{% url 'rating_book' books.slug %}" class="rating-book" method="POST" >    
+                                    {% csrf_token %}
+                                    
+                                    <input  type="hidden"  name="vlaue" id="rating_value_book" min="1" max="5"  >
+                                    <!--  <button class="btn btn-info">submit</button> -->
+
+                                    <!-- Rating System -->
+                                    <div class="rating_system pt-3 text-center">
+                                        <div class="rating_book"  style="display: inline-block;" >
+                                            <input type="radio" class="star_book_input_5" name="rating" value="5" {% if rating_book.rating == 5 %}checked{% endif %}  style="display: none;" >
+                                            <label for="star5"  class="star_book_5" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                                            <input type="radio" class="star_book_input_4" name="rating" value="4" {% if rating_book.rating == 4 %}checked{% endif %}  style="display: none;" >
+                                            <label for="star4"  class="star_book_4" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                                            <input type="radio" class="star_book_input_3" name="rating" value="3" {% if rating_book.rating == 3 %}checked{% endif %}  style="display: none;" >
+                                            <label for="star3"  class="star_book_3" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                                            <input type="radio" class="star_book_input_2" name="rating" value="2" {% if rating_book.rating == 2 %}checked{% endif %}  style="display: none;" >
+                                            <label for="star2"  class="star_book_2" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                                            <input type="radio" class="star_book_input_1" name="rating" value="1" {% if rating_book.rating == 1 %}checked{% endif %}  style="display: none;" >
+                                            <label for="star1"  class="star_book_1" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                                        </div>
+                                    </div><!-- rating pt-3 text-center -->
+                                </form>
+                            </div><!-- col-6 col-md-4 -->
+
+                            <div class="col-8 col-md-9">
+                                <table class="table table table-striped table-hover  ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{{books.name}} </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <!-- <th scope="row">1</th> -->
+                                            <td>
+                                                <div class="the-auther-in-single"><small> <i class="fa fa-user"></i>  <a href="{% url 'user' books.user %}">
+                                                            {% if books.user.user.first_name %}
+                                                            {{ books.user.user.first_name }} {{ books.user.user.last_name }}
+                                                            {% else %}
+                                                            {{ books.user}}
+                                                            {% endif %}
+                                                    </small> </a>
+                                                    {% if books.user.aprov %}
+                                                    <span> <svg width="17" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path  d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" />  <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span>
+                                                    {% endif %}
+                                                </div>
+                                        </tr>
+
+                                        <tr>
+                                            <td><div class="item-in-single"> {% if books.published_data %}<i class="fa fa-clock"></i> <small>  {{ books.published_data|timesince }} ago </small> {% endif %} {% if books.published_house %} by <a href="#"> <small> {{ books.published_house }} </small> </a> {% endif %} </div></td>
+                                        </tr>
+                                        <tr>
+                                            <td><div class="rating-in-single"> <small> <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i> {{ total_rating }} </small> </div></td>
+                                        </tr>
+
+
+                                        {% if books.size %}
+                                            <tr>
+                                                <td>
+                                                    <i class="fa fa-weight-hanging"></i> <span> {{ books.size|filesizeformat }}</span> <span> </span>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        
+                                            <tr>
+                                                <td>
+                                                    <i class="fa fa-file-lines"></i> <span> <span>  </span> {{ books.type_of_book }}  <span> || </span> </span><i class="fa fa-language"></i> <span>  <span> </span> {{ books.language }}</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <i class="fa fa-eye "></i> <span> {{ books.number_of_views }} {% if books.number_pages %} <span> ||  </span> </span>  <i class="fa fa-pager "></i> <span> <span> </span>  {{ books.number_pages }} <span></span> صفحة</span>{% endif %}
+                                                </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+
+                                {% if books.small_descrption %}
+                                    <div class="card mt-2">
+                                        <div class="card-body description ">
+                                            {{ books.small_descrption }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                            </div>
+                        </div><!-- .row  -->
+                    </div><!-- .card-body -->
+                    
+
+                    <p class="text-center d-flex justify-content-around text-lead" >
+                        <a  style="width:30%;" class=" btn btn-secondary p-2  " data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">  <i class="fa fa-angle-double-down pe-2 "></i> <i class="fa fa-comments"></i> التعليقات  </a>
+                        <button  style="width:30%;" class=" btn btn-secondary p-2 text-lead " type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="fa fa-angle-double-down pe-2"></i>  <i class="fa fa-quote-left"></i> الإفبتاسات <i class="fa fa-quote-right"></i> </button>
+                    </p>
+
+                    <div class="row ">
+                        {% include 'comments/add_comment.html' %}                                                
+                        {% include 'qoutes/add_quote.html' %}
+                    </div><!-- .row -->
+
+                </div><!-- .card shadow product_data -->
+            </div><!-- .col-md-12 -->
+        </div><!-- .row -->
+    </div><!-- .container -->
+</div><!-- ./py-5  -->
+
+{% endblock content %}
+
+{% comment %} templates/qoutes/add_quote.html {% endcomment %}
+
+
+
+{% comment %} 1985318 {% endcomment %}
+{% comment %} khaf allah yousif => MBOK {% endcomment %}

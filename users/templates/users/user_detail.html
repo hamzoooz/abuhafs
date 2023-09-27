@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+<title> {% block title %} {{profile.user}} {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <a href="{% url 'users'  %}" class="text-secondary  p-2"> all users  </a> <i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2 ">{{profile.user}}  </span>
+    </div>
+</div>
+
+
+<div class="info shadow "  style="background-image:url('{{ profile.profile_cover_image.url }}'); height:300px; background-position:center;background-size: cover; background-repeat:no-repeat "></div>
+<div class="py-5 ">
+    <div class="container ">
+
+        <div class="row user-data2 user-data  ">
+            <form action="{% url 'follow' profile.user %}" method="POST"  enctype="multipart/form-data" class="form_class_in_user p-4">
+                {% csrf_token %}
+                <input type="hidden" name="user" class='user' value="{{ request.user.id }}">
+                <input type="hidden" name="follower" class="follower" value="{{ profile.user.id }}">
+                <input type="hidden" name="url_to_get_message" value="{% url 'get_message' profile.user %}" id="url_to_get_message">
+
+                {% if request.user != profile.user %}
+                    <button class="btn btn-{{color}} add-to-card  follow  float-end  p-2 "  style="margin-top: -40px;" > <i class="fa fa-user-plus "></i> {{text}} </button>            
+                {% else %}
+                    <a href="{% url 'settings' %}"  class="btn btn-secondary add-to-card  float-end  p-2 "  style="margin-top: -40px;" > <i class="fas fa-cog fa-fw "></i> Settings </a>
+                {% endif %}
+
+                {% if request.user.is_authenticated %}
+                
+                    {% if request.user != profile.user %}
+                    <p>
+                        <button id="dialog-link" class="ui-button ui-corner-all ui-widget btn !important btn-success !important add-to-card   float-start  p-2 "  style="margin-top: -40px;"> <i class="fa fa-comment-alt "></i> Message  </button>
+                    </p>
+                    <div id="dialog" title="Dialog Title">
+                        <p>
+                            <div id="display_messages_in_user">
+                            </div>
+                            <hr>
+
+                            <form action="{% url 'send_message' profile.user %}" class="send_message_form " >
+                                {% csrf_token %}
+                                <div class="input-group add_comment_sections">
+                                    <input type="hidden" name="sender" value="{{request.user.id}}" class="sender">
+                                    <input type="hidden" name="recever" value="{{profile.user.id}}" class="recever">
+                                    <input type="hidden" name="message_topic" value="message " class="message_topic">
+                                    <input type="hidden" name="url" value="{% url 'send_message' profile.user %} " class="url_message">
+                                    <!-- <input type="hidden" name="url_to_get_message" value="{% url 'get_message' profile.user %}" class="url_to_get_message"> -->
+                                    <input type="text" requerd name="message_text" id='message_text_in_user' class="message_text form-control" rows=10 id='' placeholder="Write Message or replay user ... ">
+                                    <button class="send_message " ><i class="fa fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+                        </p>
+                    </div>
+                    {% else %}
+                        <a href='{% url "all_messages" %}' class="btn btn-success add-to-card   float-start  p-2 "  style="margin-top: -40px; "> <i class="fa fa-comments "></i> Messages </a>
+                    {% endif %}
+                {% else %}
+                    
+                    <button class="btn btn-success  add-to-card disabled   float-start  p-2 "  style="margin-top: -40px;"> <i class="fa fa-comment-alt "></i> Message  </button>
+
+                {% endif %}
+
+                <div class="position-relative shadow cover-in-sngle img-thumbnail rounded img-fluid " style="background-image: url('{{profile.profile_image.url}}');background-size: contain; height: 150px; background-repeat: no-repeat; background-position: center; border-radius: 50% !important; margin-top: -90px; border: 6px white solid; margin: -120px auto 0 ; width: 130px; "> 
+                    {% if profile.user.is_active %}                      
+                        <span class="position-absolute top-100  translate-middle p-2 bg-success border border-light rounded-circle" style="right: 15px;"> <span class="visually-hidden">Active</span> </span>
+                    {% else %}
+                        <span class="position-absolute top-100  translate-middle p-2 bg-secondary border border-light rounded-circle" style="right: 15px;"> <span class="visually-hidden">Active</span> </span>
+                    {% endif %}
+                </div>
+
+            </form>
+
+            <!-- sharing and reporting and edite -->
+            <div class="sharing-in-single pt-4 text-center ">
+                <h3 class="p-1 icon-in-share"> 
+                    {% firstof profile.user.get_full_name profile.user %}
+                    {% if profile.aprov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %}
+                </h3>
+            </div><!-- sharing-in-single -->
+
+            <!-- sharing and reporting and edite -->
+            <div class="sharing-in-single pt-2 text-center ">
+
+                <span class="p-2 fs-4" ><a href="{{ profile.contat_facebook }}"><i class="fab fa-facebook fa-1x "></i> </a></span>
+                <span class="p-2 fs-4" ><a href="{{ profile.contat_twitter }}"><i class=" fab fa-twitter fa-1x"></i>  </a></span>
+                <span class="p-2 fs-4" ><a href="{{ profile.web_site }}"><i class="fa fa-earth fa-1x "></i> </a></span>
+
+            </div><!-- sharing-in-single -->
+
+            {% if request.user != profile.user %}
+            <!-- Rating System -->
+            <div class="rating pt-3 text-center  ">
+                <form action="{% url 'rating_user'  profile.user.id  %}" class="rating-book form_class_for_rating_user " method="POST" >    
+                    {% csrf_token %}
+                    <input  type="hidden"  name="vlaue" id="rating_value_book" min="1" max="5"  >
+                    <!-- Rating System -->
+                    <div class="rating_system rating_book pt-3 text-center">
+                        <div class="rating_user"  style="display: inline-block;" >
+                            <input type="radio" class="star_user_input_5" name="rating" value="5" {% if rating_user.rating == 5 %}checked{% endif %}  style="display: none;" >
+                            <label for="star5"  class="star_user_5" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                            <input type="radio" class="star_user_input_4" name="rating" value="4" {% if rating_user.rating == 4 %}checked{% endif %}  style="display: none;" >
+                            <label for="star4"  class="star_user_4" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                            <input type="radio" class="star_user_input_3" name="rating" value="3" {% if rating_user.rating == 3 %}checked{% endif %}  style="display: none;" >
+                            <label for="star3"  class="star_user_3" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                            <input type="radio" class="star_user_input_2" name="rating" value="2" {% if rating_user.rating == 2 %}checked{% endif %}  style="display: none;" >
+                            <label for="star2"  class="star_user_2" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                            <input type="radio" class="star_user_input_1" name="rating" value="1" {% if rating_user.rating == 1 %}checked{% endif %}  style="display: none;" >
+                            <label for="star1"  class="star_user_1" style="font-size: 30px; color: #ccc; cursor: pointer;"   >&#9733;</label>
+                        </div>
+                    </div><!-- rating pt-3 text-center -->
+
+                </form>
+            </div><!-- rating pt-3 text-center -->
+            {% endif %}
+            <div class="col-md-12">
+                <div class="row">
+
+                    {% if profile.rating %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;  " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px ;"> <i class="fa fa-star  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center  " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" >No. Rate </div><br>
+                                <div><small> {{ profile.rating }}</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% comment %} join on {% endcomment %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2  "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;   " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px ;"> <i class="fa fa-clock  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center  " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" >join on </div><br>
+                                <div><small> {{ profile.create_at|date:"D d M Y" }}</small></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% comment %} Country {% endcomment %}
+                    {% if profile.conutry %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2  "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;   " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px ;"> <i class="fa fa-earth  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center   " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class="d-block"  style="font-weight: bold;" >Country  </div><br>
+                                <div><small> {{ profile.conutry }}</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% comment %} No. Book {% endcomment %}
+                    {% if books %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;   " >
+                            <div class="icon-in-user float-start  " style="margin: 13px 7px 0px 10px ;"> <i class="fa fa-book  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center  " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" >No. Book</div><br>
+                                <div><small> {{ books|length }}</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                    {% comment %} No.Download {% endcomment %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px;  padding: 10px 0px;   " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px ;"> <i class="fa fa-download  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block" > No.Download</div><br>
+                                <div><small> {{ profile.number_of_downloaded }}</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    {% comment %} last_login  {% endcomment %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;    " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px; padding-bottom: 5px;"> <i class="fa fa-eye  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" > last_login </div><br>
+                                <div><small> {{ profile.user.last_login|date:' d M '}} {{ profile.user.last_login|time:'H:i'}} </small></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    {% comment %} Following {% endcomment %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;    " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px; padding-bottom: 5px;"> <i class="fa fa-user  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" >Following </div><br>
+                                <div><small>  </small>{{ following_count }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    {% comment %} Follower {% endcomment %}
+                    <div class="col-4 col-md-3 col-lg-2 mt-2   "> 
+                        <div class="item-in-user bg-light shadow mt-4"  style="font-size: 13px; line-height: 15px; padding: 10px 0px;    " >
+                            <div class="icon-in-user float-start " style="margin: 13px 7px 0px 10px; padding-bottom: 5px;"> <i class="fa fa-star  fa-2x"> </i>  </div>
+                            <div class="title-for-info text-center " style="line-height: 10px; margin-top: 8px; padding: 4px; " >
+                                <div class=" d-block"  style="font-weight: bold;" >Follower  </div><br>
+                                <div><small>  </small>{{ followers_count }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div><!-- .row  -->
+            </div><!-- .col-md-12 -->
+        </div><!-- .row -->
+
+        <div id="tabs_user" class="pt-2">
+            <ul>
+                <li><a href="#tabs-user-1"> <i class="fa fa-book"></i> Books </a></li>
+                <li><a href="#tabs-user-2"> <i class="fa fa-quote-left"></i> Quotes <i class="fa fa-quote-right"></i> </a></li>
+                <li><a href="#tabs-user-3">Third</a></li>
+            </ul>
+
+            <div id="tabs-user-1">
+
+                    <div class="trending bg-gradient " style="--bs-bg-opacity: .6;">
+                        <h2 class="text- text-lead bg- bg-gradient customNavigation " style="padding: 3px 13px 3px 20px !important;"> <i class="fa fa-chart-line "></i> <a href="{% url 'trending_page' %} " class="text-muted"> Uploaded Books {% if profile.number_of_books %} (<span> {{ books|length }} <span>){% endif %} <i class="fa fa-long-arrow-alt-right"></i> </a>
+                            <a href="{% url 'trending_page' %} " class="btn btn-secondary- float-end pe-4"> <i class="fa fa-expand-alt"></i> </a>
+                            <a class=" text-muted stop-circle-in-frontpage float-end pe-4 "> <i class="fa fa-stop"></i> </a>
+                            <a class=" text-muted play-circle-in-frontpage  float-end pe-4"> <i class="fa fa-play"></i> </a>
+                        </h2>
+                        <div class="container-fluid" style="--bs-bg-opacity: .6; background: #f8f9fa; padding: 17px;">
+                            <div class="row ">
+                                <div id="owl-demo-user-book" class="owl-carousel">
+                                    {% for book in books %}
+                                    <div class="item  book_data shadow " id="book_id_{{book.id}}">
+                                        <div class="card  h-100 d-flex ">
+                                            <span class="dropdown d-flex justify-content-between ">
+                                                <span class="dropdown-toggle float-end " data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0 6px;margin: 1px 3px;cursor: pointer;"> <i class="fa fa-list-dots fa-lg "></i> </span>
+
+                                                <ul class="dropdown-menu coustom-dropdown "
+                                                    style="transform: translate(30px, 26px); position: absolute; inset: 0px auto auto 0px; margin: 0px;opacity: 0.8;">
+                                                    {% if request.user.is_staff %}
+                                                    <input type="hidden" value="{{ book.id }}" class="book_id">
+                                                    <li><a class="dropdown-item" href="{% url 'edit_book' book.id %}"> <i class="fa fa-edit"></i> Edit</a></li>
+                                                    <li><a class="dropdown-item move-to-draft " <i class="fa fa-trash-alt "></i> Dedete</a> </li>
+                                                    {% elif book.user == request.user %}
+                                                    <input type="hidden" value="{{ book.id }}" class="book_id">
+                                                    <li><a class="dropdown-item" href="{% url 'edit_book' book.id %}"> <i class="fa fa-edit"></i> Edit</a></li>
+                                                    <li><a class="dropdown-item move-to-draft " <i class="fa fa-trash-alt "></i> Dedete</a> </li>
+                                                    {% endif %}
+                                                    <input type="hidden" value="{{ book.id }}" class="book_id_in_wishlist">
+                                                    {% csrf_token %}
+                                                    <li><button class="dropdown-item add_to_wishlist"> <i class="fa fa-heart"></i> Read Later </button></li>
+                                                    <li><a class="dropdown-item" href="#"> <i class="fa fa-share-square"></i> shar</a></li>
+                                                    <li><a class="dropdown-item" href="#"> <i class="fa fa-triangle-exclamation"></i> Report </a></li>
+                                                </ul>
+
+                                                {% if book.abrov %} <span class="abrov-book" style="margin:auto; "> <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %}
+                                                <!-- Rating System -->
+                                                <span class="rating-system text-center float-start"> <span><i class="fa fa-star "></i></span> ( {{ book.rating }} ) </span><!-- rating pt-3 text-center -->
+                                            </span>
+                                            <br>
+                                            <a href="{% url 'book_detail' book.slug %}">
+                                                <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; "> </div>
+                                                <div class="card-body p-1">
+                                                    <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+                                            </a>
+
+                                            <a href="{% url 'user' book.user %}" class=" text-muted ">
+                                                <div class="book-user p-2"> by : {% firstof book.user.get_full_name book.user %}
+                                                    {% if book.user.aprov %} <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> {% endif %}
+                                                </div>
+                                            </a>
+
+                                            {% if book.selling_price > 0 %}
+                                            <input type="hidden" value="{{ book.id }}" class="book_id">
+                                            {% csrf_token %}
+                                            <div class="btn btn-warning add-to-card float-start addToCartBtn "> <i class="fa fa-shopping-cart"></i> Add to Card </div>
+                                            <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+                                            {% else %}
+                                            <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i class="fa fa-download"></i> download</a><a href="{{book.file.url}}" class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tabs-user-2">
+                
+                <div class="col-12" id="add_quote_sections">
+                    <div class="collapse multi-collapse show" id="multiCollapseExample2">
+                        <div class="card card-body p-0" style="border:none">
+                            <div class="col-md-12  ">
+                                {% if quotes %}
+                                <div class=" quote-sections2 ">
+                                    {% for quote in quotes %}
+                                    <div class="shadow" id="quote_id_{{quote.id}}" style="padding: 3px;background-color: #f8f9fa;border-bottom: 1px solid #c0c0c0;margin-bottom: 11px; border-top: 1px solid #c0c0c0; border-radius: 0px 0px 10px 10px "> <a href="{% url 'user' quote.user %}" class=" shadow cover-in-sngle img-thumbnail rounded img-fluid float-start" style="background-image: url('{{quote.user.profile_image.url}}');background-size: contain; height: 50px; background-repeat: no-repeat; background-position: center; border-radius: 50% !important; width:50px;margin: 0px 4px 0px 2px"> </a>
+                                        <span class="dropdown-toggle float-end " data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="padding: 0px 9px ;cursor: pointer;"> <i class="fa fa-ellipsis-v fa-lg "></i>
+                                            <span>
+                                                <ul class="dropdown-menu  "
+                                                    style="position: absolute !important; inset: 0px auto auto -50px !important; margin: 0px !important; opacity: 0.9 !important;">
+                                                    <form action="." class="form-qoutes" method="post">
+                                                        {% if request.user.id == quote.user.id or request.user.is_staff %}
+                                                        <input type="hidden" value="{{ quote.id }}" class="quote_id_in_quote">
+                                                        <li><a class="dropdown-item" href=""> <i class="fa fa-edit"></i> Edit</a></li>
+                                                        <li><a class="dropdown-item move_quote_to_trash " <i class="fa fa-trash-alt "></i> Dedete</a></li>                
+                                                        {% endif %}
+                                                        <input type="hidden" value="{{ book.id }}" class="book_id_in_quote">
+                                                        {% csrf_token %}
+                                                        <li><button class="dropdown-item  add_to_wishlist_quote"> <i class="fa fa-bookmark"></i> Mark </button></li>
+                                                        <li><a class="dropdown-item" href="#"> <i class="fa fa-share-square"></i> share</a></li>
+                                                        <li><a class="dropdown-item" href="#"> <i class="fa fa-triangle-exclamation"></i> Report </a></li>
+                                                    </form>
+                                                </ul>
+                                            </span>
+                                        </span>
+                
+                                        <a href="{% url 'user' quote.user %}"> <span class="user-in-quote "> {% firstof quote.user.get_full_name profile.user %} {% if quote.user.aprov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </span> </a>                
+                                        <small> <div style="margin: 0px 5px -10px 47px;font-size: 11px !important;" class="fs-6">{{ quote.create_at|timesince }} ago </div> </small>
+                                        {% if quote.text|wordcount > 20 %}
+                                        <div class="quote-text" style="margin:25px 7px 7px 8px; text-align: center;"> <i class="fa fa-quote-left"></i> {{ quote.text|truncatewords:20 }} <i class="fa fa-quote-left"></i> <span class="btn btn-link">more</span> </div>
+                                        {% else %}
+                                        <div class="quote-text" style="margin:25px 7px 7px 8px; text-align: center; "> <i class="fa fa-quote-left"></i> {{ quote.text }} <i class="fa fa-quote-right"></i> </div>
+                                        {% endif %}
+                                    </div><!-- .shadow  -->
+                                    {% endfor %}
+                                </div> <!--  .quote-sections -->
+                                {% else %}
+                                <div class="alert alert-dark text-muted " role="alert"> There's no qoutes yet ! write one from this book to help other peoble to read and take a look to this book </div>
+                                {% endif %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .card card-body p-0 -->
+                    </div><!-- .collapse multi-collapse show -->
+                    
+                    <!-- <form action="/add_comment" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group quotes_sections">
+                            <input type="hidden" name="user_id" value="{{request.user.id}}" class="user_id">
+                            <input type="hidden" name="book_id" value="{{books.id}}" class="book_id">
+                            <input type="text" requerd name="text_id" class="text_id_in_quote form-control" id='' placeholder="Write Comment or replay ... ">
+                            <button class="input-group-text send_quote " id="basic-addon1"><i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </form> -->
+
+                </div><!-- .quote-sections -->
+
+            </div>
+            
+            <div id="tabs-user-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
+        </div>
+
+    </div><!-- .container -->
+
+</div><!-- .py-5 -->
+
+
+
+
+
+{% if sugist_user %}
+<div class="trending bg-gradient " style="--bs-bg-opacity: .6;">
+    <h2 class="text- text-lead bg- bg-gradient customNavigation " style="padding: 3px 13px 3px 20px !important;" > <i class="fa fa-compass "></i> <a href="{% url 'feed_page' %} "  class="text-muted" > Segiste Subscripe <i class="fa fa-long-arrow-alt-right"></i> </a>
+        <a href="{% url 'feed_page' %} " class="btn btn-secondary- float-end pe-4"> <i class="fa fa-expand-alt"></i> </a>
+        <a  class=" text-muted stop-circle-in-frontpage float-end pe-4 "> <i class="fa fa-stop"></i>  </a>
+        <a  class=" text-muted play-circle-in-frontpage  float-end pe-4"> <i class="fa fa-play"></i>  </a>
+    </h2>
+
+    <div class="container-fluid" style="--bs-bg-opacity: .6; background: #f8f9fa; padding: 17px;">
+      <div class="row ">
+        <div id="owl_sugist_user" class="owl-carousel">
+          {% for user in sugist_user %}
+          <div class="item  shadow  user_id_{{user.id}}" id="user_id_{{user.id}}"  >
+            <div class="card  h-100 d-flex " >
+              <input type="hidden" name="user_id" value="{{user.id}}" class="user_id_in_user" >
+              <span class="dropdown d-flex justify-content-between ">
+                <span class="dropdown-toggle float-end "  data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0 6px;margin: 1px 3px;cursor: pointer;" > 
+                  <i class="fa fa-list-dots fa-lg "></i>
+                </span>
+
+                  <ul class="dropdown-menu coustom-dropdown " style="transform: translate(30px, 26px); position: absolute; inset: 0px auto auto 0px; margin: 0px;opacity: 0.8;">
+                    {% csrf_token %}
+                    <input type="hidden"  value="{{ book.id }}" class="book_id" >
+                    <li><a class="dropdown-item move-to-draft "> <i class="fa fa-trash-alt "></i> Dedete</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="fa fa-share-square"></i> shar</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="fa fa-triangle-exclamation"></i> Report </a></li>
+                  </ul>
+
+
+
+              </span>  <br />
+              <a href="{% url 'user' user.user %}"> <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ user.profile_image.url }}') ; width: 8rem; height: 130px; background-position: center; background-size: contain; background-repeat: no-repeat; border-radius: 50% !important; "> </div> </a> <br />
+              <a href="{% url 'user' user.user %}" class=" text-muted text-center  pt-2">  <h5 class="user_id">   {% firstof user.user.get_full_name user.user %}  {% if user.aprov %} <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> {% endif %}  </h5>  </a> <br />
+
+            <div class="user-data">
+                <form action="{% url 'follow' user.id %}" method="POST"  enctype="multipart/form-data" class=" form_class_in_user_sugist  p-1 user-data ">
+                    {% csrf_token %}
+                    <input type="hidden" name="user" class='user' value="{{ request.user.id }}">
+                    <input type="hidden" name="follower" class="follower" value="{{ user.user.id }}">
+                    <input type="hidden" name="user_id" class='user_id' value="{{ request.user.id }}">
+                    <input type="hidden" name="follower_id" class="follower_id" value="{{ name.id }}">
+                    {% if request.user.is_authenticated %}
+                        <button class="btn btn-primary w-100  follow  p-2 " style="margin-top: 10px;"> <i class="fa fa-user-plus "></i> Follow </button>
+                    {% else %}            
+                        <button class="tooltip btn btn-primary w-100 disabled p-2 " style="margin-top: 10px;"> <i class="fa fa-user-plus "></i> Follow </button>
+                    {% endif %}  
+                </form>
+            </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+{% endblock content %}
+

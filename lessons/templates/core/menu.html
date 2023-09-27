@@ -1,0 +1,33 @@
+{% if categories %}
+
+<div class=" bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+    {% comment %} <h2 class=" text-lead bg-primary bg-gradient   p-2"> the Categores </h2> {% endcomment %}
+    <h2 class="text- text-lead bg- bg-gradient " style="padding: 3px 13px 3px 20px !important;" > <i class="fa fa-tags "></i> the Categores
+    {% comment %} <a href="{% url 'my_order' %} " class="btn btn-warning1 float-end pe-4"> <i class="fa fa-expand-alt"></i> </a> {% endcomment %}
+    <a  class=" text-muted stop-circle float-end pe-4 "> <i class="fa fa-stop-circle"></i>  </a>
+    <a  class=" text-muted play-circle float-end pe-4"> <i class="fa fa-play-circle"></i>  </a>
+    </h2>
+    <div class="container-fluid" style="--bs-bg-opacity: .6; background: #f8f9fa; padding: 7px;">
+        <div class="row">
+            <div id="owl-demo-frontpage-category-book" class="owl-carousel">
+                {% for category in categories %}
+                    <div class="item">
+                        <div class="card  h-100">
+                            <a href="{% url 'category_detail' category.slug  %}">
+                                <div class="category-in-fontpage card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ category.image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat;height: 130px !important ; "> </div>
+                                <div class="card-body p-1">
+                                    <h5 class="card-title name-book text-center " style="font-size: 12px; font-weight: bold;" >{{ category.name }}</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endif %}
+
+

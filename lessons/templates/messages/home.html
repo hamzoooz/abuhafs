@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+<title> {% block title %} messages {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2">Messages </span>
+    </div>
+</div>
+
+<div class="card card-body p-0 py-5 container " style="border:none">
+    <div class="col-md-12 ">
+        {% if all_rooms %}
+        <div class=" comment-sections2 ">
+            {% for room in all_rooms %}
+            {{ sender }}
+            <div class="shadow" id="room_id_{{ room.id }}" style="padding: 3px;background-color: #f8f9fa;border-bottom: 1px solid #c0c0c0;margin-bottom: 11px; border-top: 1px solid #c0c0c0; border-radius: 0px 0px 10px 10px ">
+                <a href="{% url 'view_messages' room.name %}" class=" shadow cover-in-sngle img-thumbnail rounded img-fluid float-start" style="background-image: url('{% firstof room.sender.profile_image.url room.sender.profile_image.url %}');background-size: contain; height: 50px; background-repeat: no-repeat; background-position: center; border-radius: 50% !important; width:50px;margin: 0px 4px 0px 2px"> </a>                
+                <span class="dropdown-toggle float-end " data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0px 9px ;cursor: pointer;"> <i class="fa fa-ellipsis-v fa-lg "></i>
+                    <span>
+                        <ul class="dropdown-menu  " style="position: absolute !important; inset: 0px auto auto -50px !important; margin: 0px !important; opacity: 0.9 !important;">
+                            <form action="." class="form-room" method="post">
+                                <input type="hidden" value="{{ book.id }}" class="book_id">
+                                <input type="hidden" value="{{ room.id }}" class="room_id">
+                                <li><a class="dropdown-item" href=""> <i class="fa fa-edit"></i> Edit</a></li>
+                                <li><a class="dropdown-item move_to_trash " <i class="fa fa-trash-alt "></i> Dedete</a></li>
+                                <input type="hidden" value="{{ book.id }}" class="book_id_in_comment">
+                                {% csrf_token %}
+                                <li><button class="dropdown-item add_to_wishlist_comment"> <i class="fa fa-bookmark"></i> Mark </button></li>
+                                <li><a class="dropdown-item" href="#"> <i class="fa fa-share-square"></i> share</a></li>
+                                <li><a class="dropdown-item" href="#"> <i class="fa fa-triangle-exclamation"></i> Report </a></li>
+                            </form>
+                        </ul>
+                    </span>
+                </span>
+
+                <a href="{% url 'view_messages' room.name %}"> <span class="user-in-comment "> {% firstof room.sender.get_full_name room.sender %} {% if room.sender.user.aprov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </span> </a>
+                <small> <div style="margin: 0px 5px -10px 47px;font-size: 11px !important;" class="fs-6">{{ room.create_at|timesince }} ago </div> </small>
+                <br>
+            </div><!-- .shadow  -->
+            {% endfor %}
+        </div> <!--  .comment-sections -->
+        {% else %}
+        <div class="alert alert-dark text-muted " role="alert"> There's no rooms yet ! you can start to room to any <a href="{% url 'users' %}"> one her !</a>  </div>
+        {% endif %}
+    </div><!-- .col-md-12 -->
+</div><!-- .comment-sections -->
+
+{% endblock content %}

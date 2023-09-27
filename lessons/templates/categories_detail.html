@@ -1,0 +1,169 @@
+
+{% extends 'base.html' %}
+{% comment %} {% load menu %} {% endcomment %}
+{% load custom_filters %}
+{% load static %}
+<title>{% block title %} {% if child.name  %}{{child.name }}{% endif %} {% endblock title %} | أبوحفص </title>
+{% block content %}
+{% include 'inc/slider.html' %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'index' %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-left text-secondary  "></i>
+        <a href="{% url 'index' %}" class="text-secondary  p-2">الأقسام  </a> <i class="fa fa-caret-left text-secondary  "></i>
+        <a href="#" class="text-secondary  p-2 ">{% if child.name  %}{{child.name }}{% endif %}  </a> <i class="fa fa-caret-left text-secondary  "></i>
+        <span class="text-secondary  p-2 "> {% if parent.name  %}{{parent.name }}{% endif %}  </span>
+    </div>
+</div>
+
+
+{% if category %}
+<div class="row">
+    {% for category in category %}
+        <div class="col-12 col-lg-6 ">
+            <div class="main-post "  style="background: white;  padding: 5px 0 ; margin: 10px 0; border-radius: 9px;">
+                <div class="row">
+
+                    <div class="col-2 ">
+                        <!-- <div class="image-section" style="background-image: url('{% static  'assets/images/default_thumbnail.png' %}') ;background-size: contain; width: 100%; height: 100%; background-repeat: no-repeat; background-position: center;" ></div> -->
+                        <div class="image-section" style="background-image: url('{{ category.image.url }}') ;background-size: contain; width: 100%; height: 100%; background-repeat: no-repeat; background-position: center;" ></div>
+                    </div>
+
+                    <div class="col-10">
+                        <div class="title-section " style ><h3><a class="text " href="{% url 'categories_detail' category.id %}">{{ category.name }} <span class="subscrip_to_category"><i class="fa fa-bell float-end pe-3 fs-6"></i></span></a></h3></div>
+                        <p class="fs-6 text-muted" >{{ category.description|truncatewords:13 }}</p>
+                        <hr>
+                        <div class="shair-section p-0 ">
+                            <div class="row">
+                                <!-- info of category  -->
+                                <div class="col-8">
+                                    <div class="status-section p-0">
+                                        <sapn style="padding:2px; " class="count-cats center"><i class="fa fa-eye fa-fw"></i>{{ category.number_of_views }}</sapn>
+                                        <!-- <sapn style="padding:2px; " class="count-cats center"> <i class="fa fa-comment" aria-hidden="true"></i></sapn> -->
+                                        <sapn style="padding:2px; " class="count-cats center"> <i class="fa fa-music" aria-hidden="true"></i> {{ category.num_lessons }} </sapn>
+                                        <sapn style="padding:2px; " class="count-cats center">  <i class="fa-regular fa-clock"></i> {{ category.total_duration|default:0|format_duration }} </sapn>
+                                    </div>
+                                </div>
+                                <!-- icons-shair -->
+                                <div class="col-4">
+                                    <div class="icons-shair float-end pe-0">
+                                        <!-- <span >شارك</span> -->
+                                        <a href="#" style="padding:1px; " class="icon-shair f-s-3 icon-shair-copy">  <i class="fa fa-share"></i> </a>
+                                        <a href="#" style="padding:1px; " class="icon-shair f-s-3 icon-shair-tiwtter"> <i class="fab fa-twitter"></i> </a>
+                                        <a href="#" style="padding:1px; " class="icon-shair f-s-3 icon-shair-telegram"> <i class="fab fa-telegram"></i> </a>
+                                        <a href="#" style="padding:1px; " class="icon-shair f-s-3 icon-shair-facebook"> <i class="fab fa-facebook"></i> </a>
+                                        <a href="#" style="padding:1px; " class="icon-shair f-s-3 icon-shair-whatsapp"> <i class="fab fa-whatsapp"></i> </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- shair-section -->
+                    </div>
+                </div>  
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+
+{% if lessons %}
+<div class="row">
+    {% for lesson in lessons %}
+    <div class="col-12 col-md-12 col-lg-6 ">
+        <div class="main-post " style="background: white;  padding: 5px 0 ; margin: 10px 0; border-radius: 9px;">
+            <div class="row">
+
+                <div class="col-md-12 py-1">
+                    <div class="title-section" style="padding:2px 10px 5px 0px "> <h4 class="text lead"> {{ lesson.name }} </h4> </div>
+                    <div class="audio_player  "  style="padding:0px 10px 5px 5px ">
+                        <audio  autoplay="" controls="" src="{{ lesson.file.url }}" style=" border-radius: 7px; width: 62%;"></audio>
+                        <a href="{{lesson.url}}" download > <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-success " > <i class="fa fa-download"></i></button>  </a> 
+                        <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-warning add_to_favovert " > <i class="fa fa-bookmark"></i> <input type="hidden"  class="lesson_id" value="{{ lesson.id }}"> </button>
+                        <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-secondary  " >  <i class="fa fa-file-pdf"></i> </button>
+                        <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-secondary " > <i class="fa fa-file-pdf"></i> </button>
+                    </div>
+                    
+
+                    <div class="text-center d-flex justify-content-around text-lead">
+                        <a style=" padding:1px ; width:30%;" class="get_comments toggle-button-in-single btn btn-secondary " data-bs-toggle="collapse" href="#comment_id_{{lesson.id}}" role="button" lesson_id="{{ lesson.id }}" value="{{ lesson.id }}" aria-expanded="false" aria-controls="comment_id_{{lesson.id}}"> <i class="fa fa-angle-double-down pe-2 "></i> <i class="fa fa-comments"></i> <input type="hidden" value="{{ lesson.id }}"> التعليقات </a>
+                        <button style=" padding:1px ; width:30%;" class=" toggle-button-in-single btn btn-secondary text-lead " type="button" data-bs-toggle="collapse" data-bs-target="#quote_id_{{lesson.id}}" aria-expanded="false" aria-controls="quote_id_{{lesson.id}}"><i class="fa fa-angle-double-down pe-2"></i> <i class="fa fa-quote-left"></i> الإقتباسات <i class="fa fa-quote-right"></i> </button>
+                        <button style=" padding:1px ; width:30%;" class=" toggle-button-in-single btn btn-secondary text-lead " type="button" data-bs-toggle="collapse" data-bs-target="#text_audio_{{lesson.id}}" aria-expanded="false" aria-controls="text_audio_{{lesson.id}}"><i class="fa fa-angle-double-down pe-2"></i> <i class="fa fa-align-justify"></i> نض الدرس </button>
+                    </div>
+
+                    <div class="row   ">
+                        <div class="footer-section p-3">
+                        
+                            <div class="col-12 comment_id_{{lesson.id}}">
+                                <div class="collapse multi-collapse " id="comment_id_{{lesson.id}}">
+                                    <div class="card card-body p-0" style="border:none">
+                                        {% include 'comments/lesson_comment.html' %}
+                                    </div><!-- .card card-body p-0 -->
+                                </div><!-- .collapse multi-collapse  -->
+                            </div><!-- .comment-sections -->
+
+                            <div class="col-12 quote_id_{{lesson.id}}">
+                                <div class="collapse multi-collapse " id="quote_id_{{lesson.id}}">
+                                    <div class="card card-body p-0" style="border:none">
+                                        this is quotes  
+                                    </div><!-- .card card-body p-0 -->
+                                </div><!-- .collapse multi-collapse  -->
+                            </div><!-- .comment-sections -->
+                            
+                            <div class="col-12 text_audio_{{lesson.id}}">
+                                <div class="collapse multi-collapse " id="text_audio_{{lesson.id}}">
+                                    <div class="card card-body p-0" style="border:none">
+                                        this is quotes  
+                                    </div><!-- .card card-body p-0 -->
+                                </div><!-- .collapse multi-collapse  -->
+                            </div><!-- .comment-sections -->
+                        </div><!-- .footer-section -->
+                    </div><!-- .row -->
+
+                    <hr>
+
+
+                    <!-- <p class="fs-6 text-muted p-2 ">{{ lesson.description|truncatewords:13 }}</p> -->
+
+                    
+                    <div class="shair-section p-0 ">
+                        <div class="row">
+                            <!-- info of lesson  -->
+                            <div class="col-9">
+                                <div class="status-section  " style="padding-right:0px" >
+                                    <sapn style="margin:1px; " class="  pe-3">{{ lesson.number_of_views }}<i class="fa fa-eye fa-fw"></i> </sapn>
+                                    <sapn style="margin:1px; " class="  pe-3">{{ lesson.type_of_file|cut:"." |upper }}<i class="fa fa-file-audio"></i> </sapn>
+                                    <sapn style="margin:1px; " class="  pe-3">  {{ lesson.duration|default:0|format_duration }} <i class="fa fa-clock"></i> </sapn>
+                                    <sapn style="margin:1px; " class="  pe-3">{{ lesson.size|filesizeformat }}  </sapn>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <!-- icons-shair -->
+                            <div class="col-3">
+                                <div class="icons-shair float-end ">
+                                    <!-- <span >شارك</span> -->
+                                    {% comment %} <a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-copy"> <i class="fa fa-share"></i> </a> {% endcomment %}
+                                    <a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-tiwtter"> <i class="fab fa-twitter"></i> </a>
+                                    <a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-telegram"> <i class="fab fa-telegram"></i> </a>
+                                    <a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-facebook"> <i class="fab fa-facebook"></i> </a>
+                                    <a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-whatsapp"> <i class="fab fa-whatsapp"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- shair-section -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+  
+{% else %}
+    <div class="alert alert-secondary" role="alert"> لم يتم إضافة دروس في هذا القسم بعد ! يمكنك إضافة بعض الدروس الخاصة بهذا القسم <a href="/">من هنا</a>   </div>
+{% endif %}
+
+{% endif %}
+{% endblock content %}
+{% block scripts %} {% endblock scripts %}
+

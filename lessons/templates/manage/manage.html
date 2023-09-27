@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+<title> {% block title %} إدراة الكتب  {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+{% comment %} all_books
+all_publised
+all_wiating
+all_draft
+all_deleted
+all_abrov
+{% endcomment %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i
+            class="fa fa-caret-left text-secondary  "></i>
+        <a href="#" class="text-secondary  p-2">جميع الكتب  </a>
+    </div>
+</div>
+
+<div class="mange-section">
+    <div id="tabs" class=" container mt-4" >
+        <ul style="float: right;">
+            <li><a href="#tabs-1"> <i class="fa fa-book "></i>  كل الكتب </a></li>
+            <li><a href="#tabs-2"> <i class="fa fa-history "></i>  السلة  </a></li>
+            <li><a href="#tabs-3"> <i class="fa fa-check "></i>تم النشر</a></li>
+            <li><a href="#tabs-4">  <i class="fa fa-trash "></i> الحذف </a></li>
+            <li><a href="#tabs-5"> <i class="fa fa-hourglass-half "></i> إنتظار</a></li>
+            <li><a href="#tabs-6"> <i class="fa fa-check-circle "></i> مؤكد</a></li>
+            <li><a href="#tabs-7">  <i class="fa fa-ban "></i> لم يؤكد </a></li>
+        </ul>
+        <div class="all_books">
+            
+            {% comment %} All Books {% endcomment %}
+            <div id="tabs-1">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_books_1 ">
+                                {% for book in all_books %}
+                                <div class="row   mt-3 book_data ">
+
+                                    <div class="col-4  col-md-2 text-center ">
+                                        <a href="{% url 'book_detail' book.slug %}">
+                                            <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid "
+                                                style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;">
+                                            </div>
+                                        </a>
+
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" />  </svg> </span> {% endif %} </a></h4>
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <i class="fa fa-check "></i> تم النشر  </button>
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+
+            </div>
+            {% comment %} ############## All Draft Book ################### {% endcomment %}
+            <div id="tabs-2">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_publised _1 ">
+                                {% for book in all_draft %}
+                                <div class="row   mt-3 book_data ">
+                                    <div class="col-4  col-md-2 text-center "> <a href="{% url 'book_detail' book.slug %}"> <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid " style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;"> </div> </a>
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </a></h4>
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <iclass="fa fa-check "></iclass=> تم النشر  </button> 
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        {% comment %} <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button> {% endcomment %}
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+
+            </div>
+            {% comment %} ############## All Publised ################### {% endcomment %}
+            <div id="tabs-3">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_publised _1 ">
+                                {% for book in all_publised %}
+                                <div class="row   mt-3 book_data ">
+                                    <div class="col-4  col-md-2 text-center "> <a href="{% url 'book_detail' book.slug %}"> <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid " style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;"> </div> </a>
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </a></h4>
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <!-- <button class="btn btn-success   move_to_published  text-center mt-2 "> <iclass="fa fa-check "></iclass=> تم النشر  </button> -->
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+                                    </div>
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+            </div>
+            {% comment %} ################ All Deleted Book ################# {% endcomment %}
+            <div id="tabs-4">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_deleted_1 ">
+                                {% for book in all_deleted %}
+                                <div class="row   mt-3 book_data ">
+
+                                    <div class="col-4  col-md-2 text-center ">
+                                        <a href="{% url 'book_detail' book.slug %}">
+                                            <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid "
+                                                style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;">
+                                            </div>
+                                        </a>
+
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </a></h4>
+
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <i class="fa fa-check "></i> تم النشر  </button>
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <!-- <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button> -->
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+            </div>
+
+            {% comment %} ################ All إنتظار Book ################# {% endcomment %}
+            <div id="tabs-5">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_wiating_1 ">
+                                {% for book in all_wiating %}
+                                <div class="row   mt-3 book_data ">
+
+                                    <div class="col-4  col-md-2 text-center ">
+                                        <a href="{% url 'book_detail' book.slug %}">
+                                            <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid "
+                                                style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;">
+                                            </div>
+                                        </a>
+
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </a></h4>
+
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <i class="fa fa-check "></i> تم النشر  </button>
+                                        <!-- <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button> -->
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+
+            </div>
+
+            {% comment %} ############### All Abroved Books ################## {% endcomment %}
+            <div id="tabs-6">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_abrov_1 ">
+                                {% for book in all_abrov %}
+                                <div class="row   mt-3 book_data ">
+
+                                    <div class="col-4  col-md-2 text-center ">
+                                        <a href="{% url 'book_detail' book.slug %}">
+                                            <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid "
+                                                style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;">
+                                            </div>
+                                        </a>
+
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}">
+                                                {{ book.name }} {% if book.abrov %} <span class=" "
+                                                    style="margin:auto; "> <svg width="22" height="22"
+                                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z"
+                                                            stroke="blue" stroke-width="1.5" fill="#ffffff" />
+                                                        <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round"
+                                                            stroke-linejoin="round" fill="#ffffff" />
+                                                    </svg> </span> {% endif %}
+                                            </a></h4>
+
+
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {% endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <i class="fa fa-check "></i> تم النشر  </button>
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <!-- <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button> -->
+                                        <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button>
+
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+
+            </div>
+
+            {% comment %} ################### All Not Aboved Books ############## {% endcomment %}
+            <div id="tabs-7">
+                <div class="py-5 ">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-md-12 all_not_abrov_1 ">
+                                {% for book in all_not_abrov %}
+                                <div class="row   mt-3 book_data ">
+
+                                    <div class="col-4  col-md-2 text-center ">
+                                        <a href="{% url 'book_detail' book.slug %}"> <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid " style="background-image: url('{{book.book_image.url}}');background-size: contain; height: 100%; background-repeat: no-repeat; background-position: center; width:130px;"> </div> </a>
+                                    </div><!-- col-6 col-md-4 -->
+
+                                    <div class="col-8 col-md-10 ">
+                                        <h4> <a href="{% url 'book_detail' book.slug  %}"> {{ book.name }} {% if book.abrov %} <span class=" " style="margin:auto; "> <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42288 16.071 4.39508L17.5845 4.32435C18.7614 4.26934 19.7307 5.23857 19.6757 6.41554L19.6049 7.92905C19.5771 8.52388 19.8158 9.10016 20.2561 9.50111L21.3763 10.5213C22.2475 11.3147 22.2475 12.6853 21.3763 13.4787L20.2561 14.4989C19.8158 14.8998 19.5771 15.4761 19.6049 16.071L19.6757 17.5845C19.7307 18.7614 18.7614 19.7307 17.5845 19.6757L16.071 19.6049C15.4761 19.5771 14.8998 19.8158 14.4989 20.2561L13.4787 21.3763C12.6853 22.2475 11.3147 22.2475 10.5213 21.3763L9.50111 20.2561C9.10016 19.8158 8.52388 19.5771 7.92905 19.6049L6.41553 19.6757C5.23857 19.7307 4.26934 18.7614 4.32435 17.5845L4.39508 16.071C4.42288 15.4761 4.18418 14.8998 3.74391 14.4989L2.62368 13.4787C1.75255 12.6853 1.75255 11.3147 2.62368 10.5213L3.74391 9.50111C4.18418 9.10016 4.42288 8.52388 4.39508 7.92905L4.32435 6.41553C4.26934 5.23857 5.23857 4.26934 6.41554 4.32435L7.92905 4.39508C8.52388 4.42288 9.10016 4.18418 9.50111 3.74391L10.5213 2.62368Z" stroke="blue" stroke-width="1.5" fill="#ffffff" /> <path d="M9 12L11 14L15 10" stroke="blue" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff" /> </svg> </span> {% endif %} </a> </h4>
+                                        <div>{% if book.descrption %} {{ book.descrption|truncatewords:8|safe }} {%  endif %}</div>
+
+                                        <input type="hidden" name="book_id" class="book_id" value="{{book.id}}">
+                                        {% csrf_token %}
+
+                                        <button class="btn btn-success   move_to_published  text-center mt-2 "> <i class="fa fa-check "></i> تم النشر  </button>
+                                        <button class="btn btn-dark   move_to_waiting  text-center mt-2 "> <i class="fa fa-hourglass-half "></i> إنتظار </button>
+                                        <button class="btn btn-warning   move_to_draft  text-center mt-2 "> <i class="fa fa-history "></i> السلة </button>
+                                        <button class="btn btn-danger   move_to_delete  text-center mt-2 "> <i class="fa fa-trash "></i> حذف </button>
+                                        <button class="btn btn-primary   move_to_abrov  text-center mt-2 "> <i class="fa fa-check-circle "></i> مؤكد </button>
+                                        <!-- <button class="btn btn-info   move_to_not_abrov  text-center mt-2 "> <i class="fa fa-ban "></i> غير مؤكد </button> -->
+
+                                    </div>
+
+                                </div><!-- .row  -->
+                                {% endfor %}
+                            </div><!-- .col-md-12 -->
+                        </div><!-- .row -->
+                    </div><!-- .container -->
+                </div><!-- ./py-5  -->
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}

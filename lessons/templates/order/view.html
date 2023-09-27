@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+<title> {% block title %} My Order {% endblock title %} </title>
+
+{% block content %}
+
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2 "> My Order </span>
+    </div>
+</div>
+
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">Order View 
+                        <a href="{% url 'my_order' %} " class="btn btn-warning float-end" > <i class="fa fa-reply"></i> Back </a>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Shipping Details</h4>
+                            <hr>
+
+                            <label class="mt-3" for="">First Name </label>
+                            <!-- <div class="border p-1">{{ order.fname }}</div> -->
+                            <div class="border p-1">{{ order.user }}</div>
+
+
+                            <label class="mt-3" for="">Lasr Name </label>
+                            <div class="border p-1">{{ order.lname }}</div>
+
+
+                            <label class="mt-3" for=""> Email </label>
+                            <div class="border p-1">{{ order.email }}</div>
+
+
+                            <label class="mt-3" for="">Contact No </label>
+                            <div class="border p-1">{{ order.phone }}</div>
+
+
+                            <label class="mt-3" for="">Address </label>
+                            <div class="border p-1">
+                                {{ order.address }},
+                                {{ order.city }},
+                                {{ order.stats }},
+                                {{ order.conutry }} . 
+                            </div>
+
+
+                            <label class="mt-3" for="">Zip Code </label>
+                            <div class="border p-1">{{ order.pincode }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Product Details</h4>
+                            <table class="table table-striped ">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>Name  </th>
+                                        <th>Quantity</th>
+                                        <th>Price </th>
+                                        <th>Image </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in orderitem %}
+                                    <tr>
+                                        <td> {{ item.book.name }} </td>
+                                        <td> {{ item.quantity }} </td>
+                                        <td> {{ item.price }} </td>
+                                        <td>
+                                            <img src=" {{ item.book.book_image.url }} " alt="product image" class="img-thumbnail rounded" width="70px" height="70px"  >
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <h4>Grand Total : <span class="float-end" >{{ order.total_price | stringformat:"d" }}</span> </h4>
+                            <h6 class="border p-3" > Payment Mode : <span class="float-end">{{ order.payment_mode }}</span> </h6>
+                            <h6 class="border p-3" > Order Status : <span class="float-end">{{ order.satuts }}</span> </h6>
+                            <h6 class="border p-3" > Tracking No : <span class="float-end">{{ order.tracking_no }}</span> </h6>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- quantity, product, order, price) -->
+
+
+{% comment %} conutry, pincode, total_price, payment_mode, payment_id, satuts, message, tracking_no) {% endcomment %}
+{% comment %} Order(*, create_at, update_at, user, fname, lname, email, phone, address, city, stats, {% endcomment %}
+{% endblock content %}
+
+
+
+

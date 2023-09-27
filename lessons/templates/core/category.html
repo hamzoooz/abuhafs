@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+    <title> {% block title %} Categoreis {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2 "> All Category </span>
+    </div>
+</div>
+
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            {% for category in categoreis  %}
+                <div class="col-6 col-md-3 col-lg-2 ">
+                    <div class="card-body mt-3">
+                        <div class="card">
+                            <a href="{% url 'category_detail' category.slug %}">
+                            <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ category.image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; "> </div>
+                                <div class="card-body p-1"> <h5 class="card-title name-book text-center fs-6 ">{{ category.name }}</h5> </a>
+                            </div>                        
+                        </div><!-- card  -->
+                    </div><!-- card -body -->
+                </div><!--col-6 col-md-4 -->
+            {% endfor %}
+        </div><!-- .row -->
+    </div><!-- .container -->
+</div><!-- ./py-5  -->
+
+{% endblock content %}
+

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title> {% block title %} Log in  {% endblock title %} </title>
+
+{% block content %}
+
+<form action="{% url 'login' %}" method="post">
+{% csrf_token %}
+
+
+<div class="py-5 ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <input type="text" name="username" class="form-control p-3 my-3 " placeholder="Enter Username or Email">
+                        <input type="password" name="password" class="form-control p-3 my-3 " placeholder="password">
+                        <input type="hidden" name="country">
+                        <input type="hidden" name="postcode">
+                        <input type="hidden" name="client">
+                        
+                        <button class=" btn-lg btn btn-primary " style="margin: 0 50%;" >Login</button>
+                        <br>
+                        <span style="margin: 0 50%;" class=" pt-3"  >hav't Accont 
+                            <a href="{%  url 'signup' %}" >Signup</a>
+                        </span>
+
+                    </div><!-- .card-body -->
+                </div><!-- .card shadow product_data -->
+            </div><!-- .col-md-12 -->
+        </div><!-- .row -->
+    </div><!-- .container -->
+</div><!-- ./py-5  -->
+
+
+</form>
+{% endblock content %}
+
+
+

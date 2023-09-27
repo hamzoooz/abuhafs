@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% if books.name %}
+<title> {% block title %} {{profile.user}} {% endblock title %} </title>
+{% endif %}
+{% block content %}
+
+<div class="container d-flex  ">
+    <div class="py-1 bg-secondary1  d-flex align-items-center ">
+        <a href="{% url 'frontpage'  %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-right text-secondary  "></i>
+        <a href="{% url 'users'  %}" class="text-secondary  p-2"> all users  </a> <i class="fa fa-caret-right text-secondary  "></i>
+        <span class="text-secondary  p-2 ">{{profile.user}}  </span>
+    </div>
+</div>
+
+
+
+<div class="info "  style="background-image:url('{{ profile.profile_cover_image.url }}'); height:300px; background-position:center;background-size: cover; background-repeat:no-repeat "> </div>
+
+
+
+<div class="py-5 " >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div class="row">
+                            
+                            <div class="col-4 col-md-3 text-center ">
+                                <div class=" shadow cover-in-sngle img-thumbnail rounded img-fluid position-relative" style="background-image: url('{{profile.profile_image.url}}');background-size: contain; height: 250px; background-repeat: no-repeat; background-position: center;  ">
+ 
+                                </div>
+
+                                <button class="btn btn-success add-to-card w-100 mt-2 "> <i class="fa fa-plus "></i> Following </button>
+                                <button  class="btn btn-warning add-to-card w-100 mt-2 "> <i class="fa fa-user"></i> Followers </button>
+                                
+                                <!-- <button  class="btn btn-warning add-to-card w-100 mt-2 "> <i class="fa fa-user"></i> Followers </button> -->
+
+
+                                <!-- sharing and reporting and edite -->
+                                <div class="sharing-in-single pt-4 text-center ">
+                                    <span class="p-1 icon-in-share"><i class="fa fa-share-square"></i></span>
+                                    <span class="p-1 icon-in-share"><i class="fa fa-edit"></i></span>
+                                    <span class="p-1 icon-in-share"><i class="fa fa-share-alt"></i></span>
+                                    <!-- <span class="p-2 icon-in-share" ><i class="fa fa-circle-exclamation"></i></span> -->
+                                    <span class="p-1 icon-in-share"><i class="fa fa-triangle-exclamation"></i></span>
+                                </div><!-- sharing-in-single -->
+
+                                <!-- Rating System -->
+                                <div class="rating pt-3 text-center">
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                    <span><i class="fa fa-star"></i></span>
+                                </div><!-- rating pt-3 text-center -->
+
+                            </div><!-- col-6 col-md-4 -->
+
+                            <div class="col-8 col-md-9">
+                                <table class="table table table-striped table-hover  ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"> {% firstof profile.user.get_full_name profile.user  %} </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% comment %} date of join  {% endcomment %}
+                                        <tr>
+                                            <td>
+                                                <div class="item-in-single"> <i class="fa fa-clock"></i> <small> {{ profile.create_at|date:"D d M Y" }}</small> </div>
+                                            </td>
+                                        </tr>
+                                        {% comment %} Rating of User {% endcomment %}
+                                        <tr>
+                                            <td>
+                                                <div class="rating-in-single"> <small> <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i> {{ profile.rating }} </small> </div>
+                                            </td>
+                                        </tr>
+                                        {% comment %} Regon of User  {% endcomment %}
+                                        <tr>
+                                            <td>
+                                                <i class="fa fa-earth "></i> <span> {{ profile.conutry }} <span>
+                                            </td>
+                                        </tr>
+                                        {% comment %} Number of Book   {% endcomment %}
+                                        <tr>
+                                            <td>
+                                                <i class="fa fa-file "></i> <span> number of Book   {{ books|length }} <span>
+                                            </td>
+                                        </tr>
+                                        {% comment %}Socile Media  {% endcomment %}
+                                        <tr>
+                                            <td>
+                                                <span><a href="{{ profile.contat_facebook }}"><i class=" "></i> Facebook </a></span> ||  <span><a href="{{ profile.contat_twitter }}"><i class=" "></i> Tiwtter  </a></span> </span> ||  <span><a href="{{ profile.web_site }}"><i class=" "></i> My Site </a></span>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                                {% if profile.descrption %}
+                                    <div class="card mt-2"> <div class="card-body description "> {{ user.descrption }} </div> </div>
+                                {% endif %}
+                            </div>
+                        </div><!-- .row  -->
+                    </div><!-- .card-body -->
+                </div><!-- .card shadow product_data -->
+            </div><!-- .col-md-12 -->
+        </div><!-- .row -->
+        
+        <div id="tabs">
+            <ul>
+            <li><a href="#tabs-1">First</a></li>
+            <li><a href="#tabs-2">Second</a></li>
+            <li><a href="#tabs-3">Third</a></li>
+            </ul>
+            <div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+            <div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+            <div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
+        </div>
+
+    </div><!-- .container -->
+
+</div>
+
+
+<div class="user-book" >
+    <div class="books-user bg-gradient py-2 pt-0 " style="--bs-bg-opacity: .6;">
+        <h2 class="text-white text-lead bg-success bg-gradient p-2 "> Uploaded Books {% if  profile.number_of_books  %} (<span> {{ books|length }} <span>){% endif %} </h2>
+        <div class="container-fluid" style="--bs-bg-opacity: .6; background: #2e9264d6; padding: 17px;">
+            <div class="row">
+                <div id="owl-demo-user-book" class="owl-carousel">
+                    {% for book in books %}
+                    <div class="item">
+                        <div class="card  h-100">
+                            <a href="{% url 'book_detail' book.slug %}">
+                                <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; "> </div>
+                                <div class="card-body p-1"> <h5 class="card-title name-book text-center fs-6 m-3  ">{{ book.name }}</h5>
+                            </a>
+
+                            {% if book.selling_price > 0 %}
+                                <a href="#" class="btn btn-warning add-to-card float-start  "> <i class="fa fa-shopping-cart"></i> Add to Card </a>
+                                <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+                            {% else %}
+                                <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i class="fa fa-download"></i> download</a><a href="{{book.file.url}}" class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

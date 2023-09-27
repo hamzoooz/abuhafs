@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% comment %} {% load admin_urls %} {% endcomment %}
+  <title> {% block title %} My Library {% endblock title %} </title>
+
+
+{% load static %}
+{% block content %}
+
+{% include 'inc/slider.html' %}
+
+{% if books %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class="text-white text-lead bg-success bg-gradient p-2 "> My Favoret  </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #2e9264d6; padding: 17px;">
+    <div class="row">
+      <div id="owl-demo-frontpage-last-book" class="owl-carousel">
+        {% for book in books %}
+        <div class="item book_data ">
+          <div class="card  h-100">
+            <a href="{% url 'book_detail' book.slug %}">
+              <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; ">
+              </div>
+              <div class="card-body p-1">
+                <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+            </a>
+
+            {% comment %} <a href="{% url 'edit_book' book.id %}" class=" text-muted "> <div class="edit-link p-2"> <i class="fa fa-edit"></i>Edit  </div> </a> {% endcomment %}
+            {% if book.selling_price > 0 %}
+
+              <input type="hidden"  value="{{ book.id }}" class="book_id" >
+              {% csrf_token %}
+              <div  class="btn btn-warning add-to-card float-start addToCartBtn "> <i class="fa fa-shopping-cart"></i> Add to Card </div>
+              <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+            {% else %}
+              <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i class="fa fa-download"></i> download</a><a href="{{book.file.url}}" class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% else %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class="text-white text-lead bg-success bg-gradient p-2 "> My Favoret  </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #2e9264d6; padding: 17px;">
+    <div class="row">
+        <div class="card  h-100">
+          <div class="card-body p-1"> <h5 class="card-title name-book text-center fs-6 "> <div class="alert alert-success mt-3 " role="alert">There'r no book in you library you can add some one from here <a href="{% url 'add_book' %}" class="alert-link mt-4 ">  Add Book </a> </div> </h5> </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if read_later %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class=" text-lead bg-primary bg-gradient   p-2"> Read Later  </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #5680d0ed; padding: 17px;">
+    <div class="row">
+      <div id="owl-demo-frontpage-recent-book" class="owl-carousel">
+        {% for book in read_later %}
+        <div class="item">
+          <div class="card  h-100">
+            <a href="{% url 'book_detail' book.slug %}">
+              <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block "
+                style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; ">
+              </div>
+              <div class="card-body p-1">
+                <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+            </a>
+
+            {% comment %} <div class="cud-book py-2 my-2 ">
+              <a href="{% url 'edit_book' book.id %}" class=" text-muted ">
+                <span class="edit-link p-2 ">
+                  <i class="fa fa-edit"></i> Edit
+                </span>
+              </a>
+              
+              <a href="{% url 'delet_book' book.id %}" class=" text-muted ">
+                <span class="delet-link p-2">
+                  <i class="fa fa-trash-alt "></i> Delet
+                </span>
+              </a>
+            </div> {% endcomment %}
+
+            {% if book.selling_price > 0 %}
+            <a href="#" class="btn btn-warning add-to-card float-start  "> <i class="fa fa-shopping-cart"></i> Add to
+              Card </a>
+            <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+            {% else %}
+            <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i
+                class="fa fa-download"></i> download</a><a href="{{book.file.url}}"
+              class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+            {% endif %}
+
+          </div>
+        </div>
+      
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+
+{% if wiate %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class=" text-lead bg-warning bg-gradient   p-2"> Waiting Abrove   </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #5680d0ed; padding: 17px;">
+    <div class="row">
+      <div id="owl-demo-waiting-abrove-book" class="owl-carousel">
+        
+        {% for book in wiate  %}
+        <div class="item">
+          <div class="card  h-100">
+            <a href="{% url 'book_detail' book.slug %}">
+              <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block "
+                style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; ">
+              </div>
+              <div class="card-body p-1">
+                <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+            </a>
+
+            {% comment %} <div class="cud-book py-2 my-2 ">
+              <a href="{% url 'edit_book' book.id %}" class=" text-muted ">
+                <span class="edit-link p-2 ">
+                  <i class="fa fa-edit"></i> Edit
+                </span>
+              </a>
+              
+              <a href="{% url 'delet_book' book.id %}" class=" text-muted ">
+                <span class="delet-link p-2">
+                  <i class="fa fa-trash-alt "></i> Delet
+                </span>
+              </a>
+            </div> {% endcomment %}
+
+            {% if book.selling_price > 0 %}
+            <a href="#" class="btn btn-warning add-to-card float-start  "> <i class="fa fa-shopping-cart"></i> Add to
+              Card </a>
+            <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+            {% else %}
+            <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i
+                class="fa fa-download"></i> download</a><a href="{{book.file.url}}"
+              class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+            {% endif %}
+
+          </div>
+        </div>
+      
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+
+{% if deleted  %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class=" text-lead bg-danger bg-gradient   p-2"> Move to Trash    </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #5680d0ed; padding: 17px;">
+    <div class="row">
+      <div id="owl-demo-move-to-trash" class="owl-carousel">
+        {% for book in deleted  %}
+        <div class="item">
+          <div class="card  h-100">
+            <a href="{% url 'book_detail' book.slug %}">
+              <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; "> </div>
+              <div class="card-body p-1">
+                <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+            </a>
+
+            {% if book.selling_price > 0 %}
+            <a href="#" class="btn btn-warning add-to-card float-start  "> <i class="fa fa-shopping-cart"></i> Add to Card </a>
+            <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+            {% else %}
+            <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i class="fa fa-download"></i> download</a><a href="{{book.file.url}}" class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+
+{% if draft  %}
+<div class="trending bg-gradient py-2 pt-0 m-1" style="--bs-bg-opacity: .6;">
+  <h2 class=" text-lead bg-danger bg-gradient   p-2"> Move to Trash    </h2>
+  <div class="container-fluid" style="--bs-bg-opacity: .6; background: #5680d0ed; padding: 17px;">
+    <div class="row">
+      <div id="owl-demo-move-to-draft" class="owl-carousel">
+        {% for book in draft  %}
+        <div class="item">
+          <div class="card  h-100">
+            <a href="{% url 'book_detail' book.slug %}">
+              <div class="coner card-img-top lazyOwl  rounded img-thumbnail  mx-auto d-block " style="background-image: url('{{ book.book_image.url }}') ; width: 15rem; height: 300px; background-position: center; background-size: contain; background-repeat: no-repeat; "> </div>
+              <div class="card-body p-1">
+                <h5 class="card-title name-book text-center fs-6 ">{{ book.name }}</h5>
+            </a>
+
+            {% if book.selling_price > 0 %}
+            <a href="#" class="btn btn-warning add-to-card float-start  "> <i class="fa fa-shopping-cart"></i> Add to Card </a>
+            <span class="float-end fw-bold  ">{{ book.selling_price |stringformat:"d" }}$</span>
+            {% else %}
+            <a download href="{{book.file.url}}" class="btn btn-primary  download-link float-start  "> <i class="fa fa-download"></i> download</a><a href="{{book.file.url}}" class="btn btn-success  float-end read-link "> <i class="fa fa-eye"></i> read</a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}
+
+{% block scripts %} {% endblock scripts %}

@@ -1,0 +1,45 @@
+<div class="container-fluid shadow text-center "  style="background-color: #fff;padding: 24px 7px;border-radius: 5px;">
+
+{% if request.user.is_authenticated %}
+<footer class="footer  my-5 " >    
+    
+    <div class="link-footer  d-flex justify-content-around ">
+    {% comment %} <a class="dropdown-item-1" href="{% url 'my_store' %}"> <i class=" fa fa-store "></i> مكتبتي  </a> {% endcomment %}
+    
+    <a class="dropdown-item-1" href="{% url 'settings' %}"> <i class=" fa fa-cog fa-fw "></i> إعادات الحساب  </a>
+    {% comment %} <a class="dropdown-item-1" href="{% url 'add_book' %}"> <i class=" fa fa-plus "></i> إضافة درس</a> {% endcomment %}
+    <a class="nav-link  {% if request.resolver_match.url_name == 'logout'  %}active {% endif %} " aria-current="page" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> logout</a>    
+
+</footer>
+
+{% else %}
+<footer class="footer my-5 " >
+<div class="link-footer  d-flex justify-content-around  ">
+    {% comment %} <a class="dropdown-item-1" href="{% url 'my_store' %}"> <i class=" fa fa-store "></i> مكتبتي </a> {% endcomment %}
+    {% comment %} <a class="dropdown-item-1" href="{% url 'cart_view' %}"> <i class="fa fa-shopping-cart"></i> card </a> {% endcomment %}
+    <a class="dropdown-item-1" href="{% url 'settings' %}"> <i class=" fa fa-cog fa-fw "></i> إعادات الحساب </a>
+    {% comment %} <a class="dropdown-item-1" href="{% url 'add_book' %}"> <i class=" fa fa-plus "></i> إضافة كتاب </a> {% endcomment %}
+    <a class="nav-link  {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page" href="{% url 'login' %}"> <i class="fa fa-sign-in-alt"></i> تسجيل الدخول </a>
+    <a class="nav-link  {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page" href="{% url 'signup' %}"> <i class="fa fa-sign-out-alt"></i> التسجيل </a>
+</div>
+</footer>
+
+{% endif %}
+
+
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fa fa-donate "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_twitter }}"><i class=" fa fa-rss"></i>  </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_facebook }}"><i class="fab fa-telegram "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_facebook }}"><i class="fab fa-facebook "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_twitter }}"><i class=" fab fa-twitter"></i>  </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_twitter }}"><i class=" fab fa-youtube"></i>  </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_twitter }}"><i class=" fab fa-whatsapp"></i>  </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.contat_facebook }}"><i class="fab fa-github "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fa fa-earth "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fab fa-snapchat "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fab fa-tiktok "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fab fa-linkedin "></i> </a></span>
+<span class="p-2 fs-3" ><a href="{{ profile.web_site }}"><i class="fab fa-instagram "></i> </a></span>
+<hr>
+<span class="copy-riaght ">جميع الحقوق محفوظة لفضيلة الشيخ &copy; {{ date }}</span>
+</div>

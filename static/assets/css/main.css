@@ -1,0 +1,141 @@
+*{direction: rtl;}
+
+body {
+    /* background-image: url("../img/pexels-felix-mittermeier-1329917.jpg"); */
+    /* background-image: url("../img/pexels-guillaume-meurice-2873671.jpg"); */
+    /* background-image: url("../img/pexels-miriam-espacio-110854.jpg"); */
+    /* background-image: url("../img/pexels-aleksandar-pasaric-1694000.jpg"); */
+    background-image: url("/background.jpg");
+    /* background-repeat: repeat; */
+    /* background-size: cover; */
+}
+
+.log-site {
+    width: 400px;
+    height: 100px;
+    /* /home/hamzoooz/Documents/files/django/abu-hafs/abuhafs/media/background.jpg */
+    background-image: url('/name-abu-hadh.png');
+    /* /home/hamzoooz/Documents/files/django/abu-hafs/abuhafs/media/name-abu-hadh.png */
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: -70px;
+}
+
+.social-site {
+    float: left;
+}
+
+.search-site {
+    margin: 5px;
+}
+
+.social-site>a>svg {
+    display: initial;
+    height: 30px;
+    margin: 3px;
+    margin-top: 30px;
+    /* padding: 10px; */
+    text-align: center;
+    line-height: 45px;
+}
+body{
+    /* min-height: 1400px; */
+}
+#dialog-link {padding: .4em 1em .4em 20px; text-decoration: none; position: relative; }
+#dialog-link span.ui-icon { margin: 0 5px 0 0; position: absolute; left: .2em; top: 50%; margin-top: -8px; }
+
+/* gloabel style */
+a{ text-decoration: none;}
+li{list-style: none !important; }
+/* Front Padge  */
+/* owl in front page  */
+#owl-demo-frontpage-last-book .item { margin: 3px;}
+#owl-demo-frontpage-last-book .item img {display: block; width: 100%;height: auto;}
+
+#owl_demo_frontpage_feed_book .item { margin: 3px;}
+#owl_demo_frontpage_feed_book .item img {display: block; width: 100%;height: auto;}
+
+#owl_demo_frontpage_feed_book_slug .item { margin: 3px;}
+#owl_demo_frontpage_feed_book_slug .item img {display: block; width: 100%;height: auto;}
+
+
+#owl_demo_frontpage_feed_book_sugiste .item { margin: 3px;}
+#owl_demo_frontpage_feed_book_sugiste .item img {display: block; width: 100%;height: auto;}
+
+/* .customNavigation {
+    text-align: center;
+} */
+/* //use styles below to disable ugly selection */
+.customNavigation a {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#owl-demo-frontpage-recent-book .item {margin: 3px;}
+#owl-demo-frontpage-recent-book .item img {display: block;width: 100%; height: auto; }
+
+#owl-demo-move-to-draft .item {margin: 3px;}
+#owl-demo-move-to-draft .item img {display: block;width: 100%; height: auto; }
+
+.coustom-dropdown{
+    transform: translate(50px, 26px) !important ;
+    position: absolute !important ;
+    inset: 0px auto auto -50px !important;
+    margin: 0px !important ;
+    opacity: 0.9 !important ;
+    width: 100%;
+}
+
+.dropdown-toggle::after{
+    display: none  !important ;
+}
+/* .dropdown-toggle float-end::before{
+    display: inline-block;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+} */
+
+#owl-demo-frontpage-category-book .item { margin: 3px;}
+#owl-demo-frontpage-category-book .item img {display: block; width: 100%;height: auto;}
+
+#owl-demo-user-book .item { margin: 3px;}
+#owl-demo-user-book .item img {display: block; width: 100%;height: auto;}
+
+#owl-demo-waiting-abrove-book .item { margin: 3px;}
+#owl-demo-waiting-abrove-book .item img {display: block; width: 100%;height: auto;}
+
+#owl-demo-move-to-trash .item { margin: 3px;}
+#owl-demo-move-to-trash .item img {display: block; width: 100%;height: auto;}
+
+#owl_sugist_user .item { margin: 3px;}
+#owl_sugist_user .item img {display: block; width: 100%;height: auto;}
+
+/* card in front page  */
+.add-to-card, .download-link , .read-link{font-size: 15px; padding: 2px;}
+
+.navbar-nav .active{
+    background-color: lightblue;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+
+/* Rating System  */
+
+.rating_book input:checked ~ label {
+    color: #ffd700 !important ;
+}
+.rating_user input:checked ~ label {
+    color: #ffd700 !important ;
+}
+
+

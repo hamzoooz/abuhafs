@@ -1,0 +1,111 @@
+{% load  static %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+
+        <span class="social float-end ">
+          <span class="p-1 "><a href="{{ profile.contat_facebook }}"><i class="fab fa-telegram "></i> </a></span>
+          <span class="p-1 "><a href="{{ profile.contat_facebook }}"><i class="fab fa-facebook "></i> </a></span>
+          <span class="p-1 "><a href="{{ profile.contat_twitter }}"><i class=" fab fa-twitter"></i> </a></span>
+          <span class="p-1 "><a href="{{ profile.contat_twitter }}"><i class=" fab fa-youtube"></i> </a></span>
+      </span>
+        <span class="text-lead float-start " style="color:black; font-size: 17px; font-weight: bold; font-family: arile;" >
+          موقع فضيلة الشيخ 
+        </span>
+      <a href="{% url 'index' %}"><div class="log " style=" margin: 0 -32px 0 0 !important; background-image: url('{% static 'assets/images/name-abu-hadh.png' %}');background-size: contain; width: 300px; height: 100px; background-repeat: no-repeat; background-position: bottom;"> 
+      </a>
+
+    </div>
+
+  </div>
+
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light " style="border-radius:5px;  background-color:#fff">
+  <div class="container d-flex justify-content-between  ">
+
+    
+
+    <!-- user -->
+    <span class="nav-item dropdown ">
+      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {% if request.user.is_authenticated %} <i class="fa fa-user-circle"></i> {{request.user}}  {% else %} <i class="fa fa-list"></i> القائمة {% endif %}
+      </a>
+      <ul class="dropdown-menu" style="padding: 10px;margin-top: 15px;" >
+        <li><a class="dropdown-item" href="#"> <i class=" fa fa-store "></i> مكتبتي  </a></li>
+        <li><a class="dropdown-item" href="#"> <i class=" fa fa-cog fa-fw "></i> الإعدادات </a></li>
+        <li><a class="dropdown-item" href="{% url 'index' %}"><i class="fa fa-tags"></i> الأفسام</a></li>
+        <li><a class="dropdown-item" href="#"><i class=" fa fa-plus "></i> إضافة درس</a></li>
+        <li><hr class="dropdown-divider"></li>            
+
+        {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'logout'  %}active {% endif %} " aria-current="page"  href="{% url 'logout' %}"> <i class="fa fa-power-off"></i>  خروج</a></li>
+        {% else %}
+          <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page"  href="{% url 'login' %}"> <i class="fa fa-sign-in-alt"></i> تسجيل دخول</a></li>
+          <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page"  href="{% url 'signup' %}"> <i class="fa fa-sign-out-alt"></i> تسجيل</a></li>
+        {% endif %}
+      </ul>
+    </span>
+
+    
+    {% comment %} <a class="navbar-brand " href="#">  أبو حفص  مزمل حسين </a> {% endcomment %}
+     
+    {% comment %} Search Sections  {% endcomment %}
+    <div class="search-btn search-bar "  style="width:40%" >
+      <form action="/search" method="get" >
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="search" requerd name="productsearch" class="form-control" id='searchproduct' placeholder="إبحث هنا ...  " aria-label="Username" aria-describedby="basic-addon1">
+          <button type="submit" class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+
+<li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> <span class="badge text-bg-success">{{ number_of_messages }}</span> </button></a> </li>
+
+  </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light " style=" border-radius:5px;  background-color:#fff; border-top:1px solid #cfcfcf; padding-top: 6px;" >
+  <div class="container d-flex justify-content-between  ">
+
+    {% if request.user.is_authenticated %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'categories'  %}active {% endif %} " aria-current="page" href="{% url 'index' %}"> <i class="fa fa-list-ul"></i> الأفسام </a></li>
+      {% if request.user.is_staff %}
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if request.user.is_staff %}  <i class=" fa fa-upload"></i> {% endif %}
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#"><i class=" fa fa-plus "></i>إضافة درس </a></li>
+          <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/books/category/add/"> <i class=" fa fa-plus "></i> إضافة قسم </a></li>
+          
+          {% if not request.user.is_authenticated %}
+          <li><hr class="dropdown-divider"></li>            
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'login' %}">تسجيل دخول</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'signup' %}">تسجيل جديد</a></li>
+          {% endif %}
+        </ul>
+    </li>
+
+    {% endif %}
+    
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-music"></i> صوتياتي </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="{% url 'frontpage' %}"><i class=" fa fa-book"></i> المكتبة </a></li> {% endcomment %}
+      <li class="nav-item"><a  href="{% url 'favforet_list' %}" class="nav-link {% if request.resolver_match.url_name == 'favforet_list'  %}active {% endif %} " aria-current="page" href="{% url 'favforet_list' %}"> <i class="fa fa-bookmark"></i>  المفضلة </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> <span class="badge text-bg-success">{{ number_of_messages }}</span> </button></a> </li> {% endcomment %}
+    
+    {% else %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-music"></i> صوتياتي </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="{% url 'frontpage' %}"><i class=" fa fa-book"></i> المكتبة </a></li> {% endcomment %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'wishlist'  %}active {% endif %} " aria-current="page" href="{% url 'favforet_list' %}"> <i class="fa fa-bookmark"></i>  المفضلة </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> </button></a> </li> {% endcomment %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page"  href="{% url 'login' %}"> <i class="fa fa-sign-in-alt"></i> تسجيل دخول </a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page"  href="{% url 'signup' %}"> <i class="fa fa-door-open"> </i> التسجيل</a></li>      
+    {% endif %}
+  </div>
+</nav>
+
+
+

@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+  <div class="container d-flex justify-content-between  ">
+    
+    <a class="navbar-brand " href="#"> أبو حفص  مزمل </a>
+    
+    {% comment %} Search Sections  {% endcomment %}
+    <div class="search-btn search-bar "  style="width:40%" >
+      <form action="/search" method="get" >
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="search" requerd name="productsearch" class="form-control" id='searchproduct' placeholder="Search Here ... " aria-label="Username" aria-describedby="basic-addon1">
+          <button type="submit" class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+
+      <!-- user -->
+      <span class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if request.user.is_authenticated %} <i class="fa fa-user-circle"></i> {{request.user}}  {% else %} <i class="fa fa-list"></i> القائمة {% endif %}
+        </a>
+        <ul class="dropdown-menu" style="left: -70px;padding: 10px;margin-top: 15px;" >
+          <li><a class="dropdown-item" href="#"> <i class=" fa fa-store "></i> مكتبتي  </a></li>
+          <li><a class="dropdown-item" href="#"> <i class=" fa fa-cog fa-fw "></i> الإعدادات </a></li>
+          <li><a class="dropdown-item" href="#"><i class="fa fa-tags"></i> الأفسام</a></li>
+          <li><a class="dropdown-item" href="#"><i class=" fa fa-plus "></i> إضافة درس</a></li>
+          <li><hr class="dropdown-divider"></li>            
+
+          {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'logout'  %}active {% endif %} " aria-current="page"  href="#"> <i class="fa fa-power-off"></i>  خروج</a></li>
+          {% else %}
+            <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page"  href="#"> <i class="fa fa-sign-in-alt"></i> تسجيل دخول</a></li>
+            <li class="nav-item dropdown-item "><a class="nav-link  {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page"  href="#"> <i class="fa fa-sign-out-alt"></i> تسجيل</a></li>
+          {% endif %}
+        </ul>
+      </span>
+
+  </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-top:1px solid #cfcfcf; padding-top: 6px;" >
+  <div class="container d-flex justify-content-between  ">
+
+    {% if request.user.is_authenticated %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'categories'  %}active {% endif %} " aria-current="page" href="#"> <i class="fa fa-list-ul"></i> Collections </a></li>
+      {% if request.user.is_staff %}
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if request.user.is_staff %}  <i class=" fa fa-upload"></i> {% endif %}
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#"><i class=" fa fa-plus "></i>إضافة كتاب</a></li>
+          <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/books/category/add/"> <i class=" fa fa-plus "></i> إضافة قسم </a></li>
+          
+          {% if not request.user.is_authenticated %}
+          <li><hr class="dropdown-divider"></li>            
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">تسجيل دخول</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">تسجيل جديد</a></li>
+          {% endif %}
+        </ul>
+    </li>
+
+    {% endif %}
+    
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-shopping-cart"></i> ( {{ cart|length }} )</a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'wishlist'  %}active {% endif %} " aria-current="page" href="#"> <i class="fa fa-heart"></i> </a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> <span class="badge text-bg-success">{{ number_of_messages }}</span> </button></a> </li>
+    
+    {% else %}
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-shopping-cart"></i> ( {{ cart|length }} )</a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'wishlist'  %}active {% endif %} " aria-current="page" href="#"> <i class="fa fa-heart"></i> </a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> </button></a> </li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page"  href="#"> <i class="fa fa-sign-in-alt"></i> تسجيل دخول </a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page"  href="#"> <i class="fa fa-door-open"> </i> التسجيل</a></li>      
+    {% endif %}
+  </div>
+</nav>
+
