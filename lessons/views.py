@@ -21,12 +21,14 @@ def categories_detail(request, category_id):
 
     # Get child categories if they exist
     child_categories = main_category.children.all()
-
+    parent = main_category.parent  # Parent category if it exists
+    
     if child_categories:
         # Display child categories
         return render(request, 'categories_detail.html', {
             "main_category": main_category,
             "child_categories": child_categories,
+            "parent": parent,  # Pass parent to the template
         })
     else:
         # No child categories, so get lessons inside the main category
@@ -35,23 +37,20 @@ def categories_detail(request, category_id):
         return render(request, 'categories_detail.html', {
             "main_category": main_category,
             "lessons": lessons,
-            
         })
 
 def child_category_detail(request, category_id):
     # Get the child category if it exists, otherwise get lessons inside the main category
     child_category = get_object_or_404(Categorys, pk=category_id)
     lessons = Lessons.objects.filter(category=child_category)
+    parent = child_category.parent
+
 
     return render(request, 'categories_detail.html', {
         "child_category": child_category,
         "lessons": lessons,
+        "parent": parent,  # Pass parent to the template
     })
-
-
-
-
-
 
 def incres_the_views_to_categorey(request, parent_id):
     lesson_id = request.POST['categorys_id']

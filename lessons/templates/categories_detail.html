@@ -11,8 +11,12 @@
     <div class="py-1 bg-secondary1  d-flex align-items-center ">
         <a href="{% url 'index' %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-left text-secondary  "></i>
         <a href="{% url 'index' %}" class="text-secondary  p-2">الأقسام  </a> <i class="fa fa-caret-left text-secondary  "></i>
-        <a href="#" class="text-secondary  p-2 ">{% if child.name  %}{{main_category.name }}{% endif %}  </a> <i class="fa fa-caret-left text-secondary  "></i>
-        <span class="text-secondary  p-2 "> {% if parent.name  %}{{parent.name }}{% endif %}  </span>
+        {% if child_categories %}
+            <a href="#" class="text-secondary  p-2 ">{{ main_category }}
+        {% else %} 
+            <a href="#" class="text-secondary  p-2 ">{{ main_category }}
+        {% endif %}  </a> 
+        <span class="text-secondary  p-2 "> {% if parent  %}{{parent }}{% endif %}  </span>
     </div>
 </div>
 
@@ -76,7 +80,7 @@
                 <div class="col-md-12 py-1">
                     <div class="title-section" style="padding:2px 10px 5px 0px "> <h4 class="text lead"> {{ lesson.name }} </h4> </div>
                     <div class="audio_player  "  style="padding:0px 10px 5px 5px ">
-                        <audio  autoplay="" controls="" src="{{ lesson.file.url }}" style=" border-radius: 7px; width: 62%;"></audio>
+                        <audio  autoplay="false" controls="" src="{{ lesson.file.url }}" style=" border-radius: 7px; width: 62%;"></audio>
                         <a href="{{lesson.url}}" download > <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-success " > <i class="fa fa-download"></i></button>  </a> 
                         <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-warning add_to_favovert " > <i class="fa fa-bookmark"></i> <input type="hidden"  class="lesson_id" value="{{ lesson.id }}"> </button>
                         <button style="padding:7px; margin-top:-30px; margin-left: 5px; " class=" btn btn-secondary  " >  <i class="fa fa-file-pdf"></i> </button>

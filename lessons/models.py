@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum, Count
 
 
     
@@ -15,9 +16,31 @@ class Categorys(models.Model):
     description = models.TextField(max_length=2000)
     # number_of_lessons = models.ForeignKey(Lessons, on_delete=models.CASCADE)
     
-    def get_descendants(self):
-        pass
-    
+    # ... other fields ...
+    @property
+    def lessons_count(self):
+        # Get the count of lessons within the category
+        count = Lessons.objects.filter(category=self).count()
+        return count
+
+    @property
+    def total_duration(self):
+        # Get all the lessons (music files) within the category
+        lessons = Lessons.objects.filter(category=self)
+
+        # Calculate the total duration using Django's aggregation Sum function
+        total_duration = lessons.aggregate(Sum('duration'))['duration__sum']
+
+        # Return the total duration (or 0 if there are no lessons)
+        return total_duration or 0
+
+    @total_duration.setter
+    def total_duration(self, value):
+        # This setter method allows you to set the total_duration property
+        # It's up to you how you want to handle setting the value, as it's not clear from your question
+        pass 
+    # ... other methods and fields ...
+        
     def __str__(self):
         return f'{self.name}'
 
