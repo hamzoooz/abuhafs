@@ -1,6 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render , get_object_or_404 
 from pydub import AudioSegment  # Make sure to import the necessary library
-
 # Create your views here.
 from django.db.models import Count , Sum
 from django.shortcuts import render , redirect
@@ -15,67 +14,43 @@ def index(request):
     return render(request, 'category.html', {"categores": categores})
 
 
-def categories_detail(request, parent_id):
-    try:
-        # Fetch the category
-        category = Categorys.objects.filter(parent=parent_id).annotate(num_lessons=Count('lessons'), total_duration=Sum('lessons__duration')).first()
-        if not category:
-            raise Categorys.DoesNotExist
 
-        # Increment the number of views for the category
-        category.number_of_views += 1
-        category.save()
+def categories_detail(request, category_id):
+    # Get the main category
+    main_category = get_object_or_404(Categorys, pk=category_id)
 
-        # Fetch child category
-        child = Categorys.objects.get(pk=parent_id)
+    # Get child categories if they exist
+    child_categories = main_category.children.all()
 
-        # Fetch parent category
-        parent = Categorys.objects.filter(pk=category.parent_id).first()
-
-        # Fetch lessons for the category
-        lessons = Lessons.objects.filter(category=parent_id)
-
-        # Process each lesson
-        for lesson in lessons:
-            # Increment the number of views for the lesson
-            lesson.number_of_views += 1
-            lesson.save()
-
-            # Get the file path
-            file = lesson.file.path
-
-            # Check if the file exists
-            if os.path.exists(file):
-                # Get the file extension
-                file_extension = os.path.splitext(file)[1]
-                lesson.type_of_file = file_extension
-
-                # Get the file size
-                file_size = os.path.getsize(file)
-                lesson.size = file_size
-
-                # Set the URL
-                lesson.url = lesson.file.url
-
-                # Open the audio file and calculate duration
-                audio = AudioSegment.from_file(file)
-                lesson.duration = audio.duration_seconds
-
-                # Save the lesson
-                lesson.save()
-            else:
-                # Handle the case where the file does not exist
-                print(f"File not found: {file}")
+    if child_categories:
+        # Display child categories
+        return render(request, 'categories_detail.html', {
+            "main_category": main_category,
+            "child_categories": child_categories,
+        })
+    else:
+        # No child categories, so get lessons inside the main category
+        lessons = Lessons.objects.filter(category=main_category)
 
         return render(request, 'categories_detail.html', {
-            "category": category,
-            "lessons": lessons, 
-            "child": child, 
-            "parent": parent, 
+            "main_category": main_category,
+            "lessons": lessons,
+            
         })
-    except Categorys.DoesNotExist:
-        # Handle the case where the category does not exist
-        return HttpResponse("Category not found", status=404)
+
+def child_category_detail(request, category_id):
+    # Get the child category if it exists, otherwise get lessons inside the main category
+    child_category = get_object_or_404(Categorys, pk=category_id)
+    lessons = Lessons.objects.filter(category=child_category)
+
+    return render(request, 'categories_detail.html', {
+        "child_category": child_category,
+        "lessons": lessons,
+    })
+
+
+
+
 
 
 def incres_the_views_to_categorey(request, parent_id):
@@ -113,22 +88,3 @@ def favforet_list(request):
     favforet_list = Favforet_list.objects.filter(user=user.id)
     return render(request, 'lessons/fav_list.html' , {"favforet_list":favforet_list})
 
-
-
-# def categories_detail(request, parent_id):
-#     category = Categorys.objects.get(id=parent_id)
-#     if category.get_descendants():
-#         # If the category has child categories, get the last child category
-#         last_child = category.get_descendants(include_self=True).last()
-#         lessons = Lessons.objects.filter(category=last_child)
-#     else:
-#         # If the category doesn't have child categories, get its lessons
-#         lessons = Lessons.objects.filter(category=category)
-
-#     # context = {
-#     #     'category': category,
-#     #     'lessons': lessons,
-#     # }
-#     return render(request, 'categories_detail.html', {
-#         "category": category,
-#         "lessons": lessons,})

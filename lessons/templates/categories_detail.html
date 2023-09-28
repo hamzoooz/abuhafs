@@ -11,15 +11,15 @@
     <div class="py-1 bg-secondary1  d-flex align-items-center ">
         <a href="{% url 'index' %}" class="text-secondary  p-2 "><i class="fa fa-home"></i> </a><i class="fa fa-caret-left text-secondary  "></i>
         <a href="{% url 'index' %}" class="text-secondary  p-2">الأقسام  </a> <i class="fa fa-caret-left text-secondary  "></i>
-        <a href="#" class="text-secondary  p-2 ">{% if child.name  %}{{child.name }}{% endif %}  </a> <i class="fa fa-caret-left text-secondary  "></i>
+        <a href="#" class="text-secondary  p-2 ">{% if child.name  %}{{main_category.name }}{% endif %}  </a> <i class="fa fa-caret-left text-secondary  "></i>
         <span class="text-secondary  p-2 "> {% if parent.name  %}{{parent.name }}{% endif %}  </span>
     </div>
 </div>
 
 
-{% if category %}
+{% if child_categories %}
 <div class="row">
-    {% for category in category %}
+    {% for category in child_categories %}
         <div class="col-12 col-lg-6 ">
             <div class="main-post "  style="background: white;  padding: 5px 0 ; margin: 10px 0; border-radius: 9px;">
                 <div class="row">
