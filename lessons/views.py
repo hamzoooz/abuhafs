@@ -1,12 +1,12 @@
 from django.shortcuts import render
+from pydub import AudioSegment  # Make sure to import the necessary library
 
 # Create your views here.
 from django.db.models import Count , Sum
 from django.shortcuts import render , redirect
-from django.http import  JsonResponse
+from django.http import  JsonResponse , HttpResponse
 from lessons.models import * 
 from django.contrib.auth.models import User 
-from pydub import AudioSegment
 import os 
         
 def index(request):
@@ -16,60 +16,67 @@ def index(request):
 
 
 def categories_detail(request, parent_id):
-    #  name, user, create_at, update_at, number_of_views, parent, description)
-    category = Categorys.objects.filter(parent=parent_id).annotate(num_lessons=Count('lessons'), total_duration=Sum('lessons__duration'))
-    child = Categorys.objects.get(pk=parent_id)
-    
-    if not (Categorys.objects.exists()):
-        parent = Categorys.objects.get(parent=parent_id)
-    else:
-        try :
-            parent = Categorys.objects.get(parent=parent_id)
-        except:
-            parent = ''
-    
-    categorey = Categorys.objects.filter(parent=parent_id).first()
+    try:
+        # Fetch the category
+        category = Categorys.objects.filter(parent=parent_id).annotate(num_lessons=Count('lessons'), total_duration=Sum('lessons__duration')).first()
+        if not category:
+            raise Categorys.DoesNotExist
 
-    if (categorey):
-        categorey.number_of_views += 1 
-        categorey.save()
+        # Increment the number of views for the category
+        category.number_of_views += 1
+        category.save()
 
-    # name, user, create_at, update_at, number_of_views, description, url, category, tags)
-    lessons = Lessons.objects.filter(category=parent_id)
-    for i in lessons:
-        i.number_of_views += 1 
-        i.save()
+        # Fetch child category
+        child = Categorys.objects.get(pk=parent_id)
 
-    for lesson in lessons:
-        lesson = Lessons.objects.get(pk=lesson.id)
-        file = lesson.file.path
-        print(file)
-        # ################################
-        #  get extenion of file
-        file_extension = os.path.splitext(file)[1]
-        lesson.type_of_file = file_extension
-        # ################################
-        #  get size of file
-        file_size = os.path.getsize(file)
-        lesson.size = file_size
+        # Fetch parent category
+        parent = Categorys.objects.filter(pk=category.parent_id).first()
 
-        
-        lesson.url = lesson.file.url
+        # Fetch lessons for the category
+        lessons = Lessons.objects.filter(category=parent_id)
 
-        # audio = AudioSegment.from_file(file)
-        # lesson.duration = audio.duration_seconds
-        lesson.save()
+        # Process each lesson
+        for lesson in lessons:
+            # Increment the number of views for the lesson
+            lesson.number_of_views += 1
+            lesson.save()
 
-        
-        number_of_views = 0
-        lesson.number_of_views += 1
+            # Get the file path
+            file = lesson.file.path
 
-    return render(request, 'categories_detail.html', {
-        "category": category,
-        "lessons": lessons, 
-        "child": child, 
-        "parent": parent, 
+            # Check if the file exists
+            if os.path.exists(file):
+                # Get the file extension
+                file_extension = os.path.splitext(file)[1]
+                lesson.type_of_file = file_extension
+
+                # Get the file size
+                file_size = os.path.getsize(file)
+                lesson.size = file_size
+
+                # Set the URL
+                lesson.url = lesson.file.url
+
+                # Open the audio file and calculate duration
+                audio = AudioSegment.from_file(file)
+                lesson.duration = audio.duration_seconds
+
+                # Save the lesson
+                lesson.save()
+            else:
+                # Handle the case where the file does not exist
+                print(f"File not found: {file}")
+
+        return render(request, 'categories_detail.html', {
+            "category": category,
+            "lessons": lessons, 
+            "child": child, 
+            "parent": parent, 
         })
+    except Categorys.DoesNotExist:
+        # Handle the case where the category does not exist
+        return HttpResponse("Category not found", status=404)
+
 
 def incres_the_views_to_categorey(request, parent_id):
     lesson_id = request.POST['categorys_id']
