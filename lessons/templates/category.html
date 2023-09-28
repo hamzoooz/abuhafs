@@ -26,24 +26,29 @@
                         <div class="shair-section p-0 ">
                             <div class="row">
                                 <!-- info of category  -->
-                                <div class="col-8">
+                                <div class="col-11">
                                     <div class="status-section">
                                         <sapn style="padding:2px; " class="count-cats p-2 center"><i class="fa fa-eye fa-fw"></i> {{ category.number_of_views }} </sapn>
                                         <sapn style="padding:2px; " class="count-cats p-2 center"> <i class="fa fa-music" aria-hidden="true"></i> {{ category.num_lessons }} </sapn>
                                         <sapn style="padding:2px; " class="count-cats p-2 center">  <i class="fa-regular fa-clock"></i> {{ category.total_duration|default:0|format_duration }} </sapn>
                                     </div>
                                 </div>
-                                <!-- icons-shair -->
-                                <div class="col-4">
-                                    <div class="icons-shair float-end">
-                                        <!-- <span >شارك</span> -->
-                                        <a href="#" style="padding:1px" class="icon-shair f-s-3 icon-shair-copy">  <i class="fa fa-share"></i> </a>
-                                        <a href="#" style="padding:1px" class="icon-shair f-s-3 icon-shair-tiwtter"> <i class="fab fa-twitter"></i> </a>
-                                        <a href="#" style="padding:1px" class="icon-shair f-s-3 icon-shair-telegram"> <i class="fab fa-telegram"></i> </a>
-                                        <a href="#" style="padding:1px" class="icon-shair f-s-3 icon-shair-facebook"> <i class="fab fa-facebook"></i> </a>
-                                        <a href="#" style="padding:1px" class="icon-shair f-s-3 icon-shair-whatsapp"> <i class="fab fa-whatsapp"></i> </a>
+                            <!-- icons-shair -->
+                            <div class="col-1">
+                                <div class="icons-shair float-end ">
+                                    <div class="dropdown">
+                                        <span type="button" class="m-1   " data-bs-toggle="dropdown">
+                                              <i class="fa fa-share ml-2"></i> 
+                                        </span>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-tiwtter"> <i class="fab fa-twitter"></i> </a></li>
+                                            <li><a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-telegram"> <i class="fab fa-telegram"></i> </a></li>
+                                            <li><a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-facebook"> <i class="fab fa-facebook"></i> </a></li>
+                                            <li><a href="#" style="padding:1px; " class="icon-shair  f-s-5 icon-shair-whatsapp"> <i class="fab fa-whatsapp"></i> </a></li>
+                                        </ul>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div><!-- shair-section -->
                     </div>
