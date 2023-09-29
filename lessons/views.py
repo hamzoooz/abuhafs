@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render , get_object_or_404 
 from pydub import AudioSegment  # Make sure to import the necessary library
 # Create your views here.
@@ -88,20 +89,8 @@ def favforet_list(request):
 
 def search(request):
     query = request.GET.get('productsearch', '')
-# name
-# file
-# url
-# category
-# user
-# description
-# tags
-# number_of_views
-# create_at
-# update_at
-# type_of_file
-# size
-# duration
-    books = Lessons.objects.filter(
+
+    lessons = Lessons.objects.filter(
         Q(name__icontains=query) |
         Q(description__icontains=query) |
         Q(meta_tilte__icontains=query) |
@@ -115,16 +104,18 @@ def search(request):
         Q(create_at__icontains=query) 
         # available='publised'
         )
+    count = len(lessons) 
 
     return render(request , "search.html" , {
         'query':query,
-        'books':books,
+        "count":count, 
+        'lessons':lessons,
     })
 
-def book_list(request):
-    books = Books.objects.filter(available='publised').values_list('name' , flat=True)
-    book_list = list(books)[0:100]
-    # book_list = list(books)
+# def book_list(request):
+#     books = Books.objects.filter(available='publised').values_list('name' , flat=True)
+#     book_list = list(books)[0:100]
+#     # book_list = list(books)
 
-    return JsonResponse(book_list, safe=False )
+#     return JsonResponse(book_list, safe=False )
 
