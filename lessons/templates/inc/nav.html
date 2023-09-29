@@ -97,9 +97,9 @@
       {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> <span class="badge text-bg-success">{{ number_of_messages }}</span> </button></a> </li> {% endcomment %}
     
     {% else %}
-      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-music"></i> صوتياتي </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="#"><i class=" fa fa-music"></i> صوتياتي </a></li> {% endcomment %}
       {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cart_view'  %}active {% endif %} " aria-current="page" href="{% url 'frontpage' %}"><i class=" fa fa-book"></i> المكتبة </a></li> {% endcomment %}
-      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'wishlist'  %}active {% endif %} " aria-current="page" href="{% url 'favforet_list' %}"> <i class="fa fa-bookmark"></i>  المفضلة </a></li>
+      {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'wishlist'  %}active {% endif %} " aria-current="page" href="{% url 'favforet_list' %}"> <i class="fa fa-bookmark"></i>  المفضلة </a></li> {% endcomment %}
       {% comment %} <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'all_messages'  %}active {% endif %} " aria-current="page"  href="#"> <button type="button" class="btn btn-secondary"> <i class="fa fa-bell"></i> </button></a> </li> {% endcomment %}
       <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'login'  %}active {% endif %} " aria-current="page"  href="{% url 'login' %}"> <i class="fa fa-sign-in-alt"></i> تسجيل دخول </a></li>
       <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'signup'  %}active {% endif %} " aria-current="page"  href="{% url 'signup' %}"> <i class="fa fa-door-open"> </i> التسجيل</a></li>      

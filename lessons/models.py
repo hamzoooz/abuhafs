@@ -58,6 +58,10 @@ class Lessons(models.Model):
     type_of_file = models.CharField(max_length=10, default='MP3')
     size  = models.IntegerField(default=0, blank=True, null=True)
     duration = models.IntegerField(default=0)
+    meta_tilte = models.CharField(max_length=50, blank=True, null=True)
+    meta_keyword = models.CharField(max_length=50, blank=True, null=True)
+    meta_description = models.CharField(max_length=50, blank=True, null=True)
+    tage = models.CharField(max_length=50, blank=True, null=True)
     # duration duration
     
     def __str__(self):

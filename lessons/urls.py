@@ -8,4 +8,6 @@ urlpatterns = [
     path('incres_the_views_to_categorey/<str:parent_id>',views.incres_the_views_to_categorey, name='incres_the_views_to_categorey'),
     path('add_to_favforet/<int:lesson_id>',views.add_to_favforet, name='add_to_favforet'),
     path('favforet_list', views.favforet_list, name='favforet_list'),
+    path('search', views.search, name='search'),
+    
 ]

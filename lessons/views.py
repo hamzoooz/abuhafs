@@ -13,8 +13,6 @@ def index(request):
     categores = Categorys.objects.filter(parent=None).annotate( num_lessons=Count('lessons'), total_duration=Sum('lessons__duration'))
     return render(request, 'category.html', {"categores": categores})
 
-
-
 def categories_detail(request, category_id):
     # Get the main category
     main_category = get_object_or_404(Categorys, pk=category_id)
@@ -86,4 +84,47 @@ def favforet_list(request):
     user = User.objects.get(username=request.user)    
     favforet_list = Favforet_list.objects.filter(user=user.id)
     return render(request, 'lessons/fav_list.html' , {"favforet_list":favforet_list})
+
+
+def search(request):
+    query = request.GET.get('productsearch', '')
+# name
+# file
+# url
+# category
+# user
+# description
+# tags
+# number_of_views
+# create_at
+# update_at
+# type_of_file
+# size
+# duration
+    books = Lessons.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(meta_tilte__icontains=query) |
+        Q(meta_keyword__icontains=query) |
+        Q(meta_description__icontains=query) |
+        # Q(category__icontains=query) |
+        Q(create_at__icontains=query) |
+        # Q(user.username__icontains=query) |
+        # Q(published_house__icontains=query) |
+        Q(tags__icontains=query) |
+        Q(create_at__icontains=query) 
+        # available='publised'
+        )
+
+    return render(request , "search.html" , {
+        'query':query,
+        'books':books,
+    })
+
+def book_list(request):
+    books = Books.objects.filter(available='publised').values_list('name' , flat=True)
+    book_list = list(books)[0:100]
+    # book_list = list(books)
+
+    return JsonResponse(book_list, safe=False )
 
